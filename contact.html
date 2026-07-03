@@ -46,25 +46,22 @@
     
 <h2>ご相談の流れ</h2><ul class="plan"><li>フォーム送信後、2営業日以内にご返信します</li><li>初回はオンライン面談で、課題の輪郭を一緒に整理します</li><li>この段階での費用は発生しません</li></ul>
 <h2>お問い合わせフォーム</h2>
-<form class="contact-form" action="https://formsubmit.co/t.kameda@shintansha.jp" method="POST">
-  <input type="hidden" name="_subject" value="【新譚舎HP】お問い合わせ">
-  <input type="hidden" name="_next" value="https://www.shintansha.jp/thanks.html">
-  <input type="text" name="_honey" style="display:none">
+<form class="contact-form" id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLSf11f1UMZhnipwa_FrKhufwnEK2fGGHQgv77tGIy8MFBDWP3A/formResponse" method="POST" target="gform_iframe">
   <div class="field">
     <label>会社名・団体名</label>
-    <input type="text" name="会社名" placeholder="株式会社○○">
+    <input type="text" name="entry.1498479307" placeholder="株式会社○○">
   </div>
   <div class="field">
     <label>お名前<span class="req">必須</span></label>
-    <input type="text" name="お名前" required>
+    <input type="text" name="entry.1416023192" required>
   </div>
   <div class="field">
     <label>メールアドレス<span class="req">必須</span></label>
-    <input type="email" name="email" required placeholder="you@example.com">
+    <input type="email" name="entry.198223133" required placeholder="you@example.com">
   </div>
   <div class="field">
     <label>ご相談の種別</label>
-    <select name="種別">
+    <select name="entry.1858279372">
       <option>組織開発について</option>
       <option>CHRO代行について</option>
       <option>人事制度設計について</option>
@@ -74,11 +71,26 @@
   </div>
   <div class="field">
     <label>ご相談内容<span class="req">必須</span></label>
-    <textarea name="ご相談内容" rows="7" required placeholder="現在の状況やお困りごとを、整理されていない状態のままで構いませんのでお書きください。"></textarea>
+    <textarea name="entry.1893857422" rows="7" required placeholder="現在の状況やお困りごとを、整理されていない状態のままで構いませんのでお書きください。"></textarea>
   </div>
   <button type="submit" class="btn btn-navy">送信する</button>
-  <p class="form-note">送信いただいた内容はメールで代表に直接届き、2営業日以内にご返信します。研修のご依頼はエージェント経由でも承っていますが、こちらは直接ご依頼・ご相談の窓口です。</p>
+  <p class="form-note">送信いただいた内容は代表に直接届き、2営業日以内にご返信します。研修のご依頼はエージェント経由でも承っていますが、こちらは直接ご依頼・ご相談の窓口です。</p>
 </form>
+<iframe name="gform_iframe" style="display:none" aria-hidden="true"></iframe>
+<script>
+(function () {
+  var form = document.getElementById("gform");
+  var sent = false;
+  form.addEventListener("submit", function () {
+    var company = form.querySelector('[name="entry.1498479307"]');
+    if (!company.value) company.value = "（未記入）";
+    sent = true;
+  });
+  document.querySelector('iframe[name="gform_iframe"]').addEventListener("load", function () {
+    if (sent) window.location.href = "thanks.html";
+  });
+})();
+</script>
     
   </div>
 </div>
