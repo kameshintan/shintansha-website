@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>課長 一年目の選択</title>
+<style>
+  :root {
+    --ink: #e8e4da; --dim: #9a958a; --accent: #d4a94c; --danger: #c96b5c;
+    --panel: rgba(10, 14, 24, .82); --panel-line: rgba(212, 169, 76, .35);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+    color: var(--ink); background: #0a0e18; overflow: hidden;
+  }
+  #stage { position: relative; height: 100%; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; }
+  /* 背景（イラスト導入までのプレースホルダ・グラデーション） */
+  #bg { position: absolute; inset: 0; transition: background 1.2s; }
+  .bg-title       { background: linear-gradient(160deg, #0d1b3e 0%, #1a2f5e 55%, #3d3a2e 100%); }
+  .bg-office      { background: linear-gradient(165deg, #21304a 0%, #2e4260 60%, #46536a 100%); }
+  .bg-office_night{ background: linear-gradient(165deg, #0e1526 0%, #1b2440 60%, #2a3050 100%); }
+  .bg-izakaya     { background: linear-gradient(165deg, #3a2417 0%, #57351c 60%, #6e4a24 100%); }
+  .bg-meeting     { background: linear-gradient(165deg, #26313a 0%, #37474f 60%, #4b5d66 100%); }
+  .bg-street_night{ background: linear-gradient(180deg, #070b18 0%, #131a33 55%, #26224a 100%); }
+  .bg-end_best    { background: linear-gradient(165deg, #1a3a5e 0%, #2e6088 55%, #3d3a2e 100%); }
+  .bg-end_bad     { background: linear-gradient(170deg, #170d12 0%, #2e1520 60%, #451c26 100%); }
+  .bg-end_normal  { background: linear-gradient(165deg, #1e2a3e 0%, #33455e 60%, #57636e 100%); }
+  #bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 30%, transparent 40%, rgba(0,0,0,.45) 100%); }
+
+  /* 立ち絵（assets/char_*.png があるときだけ表示される） */
+  #portrait { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 2;
+    max-height: 82%; max-width: 88%; opacity: 0; transition: opacity .35s; pointer-events: none;
+    filter: drop-shadow(0 6px 18px rgba(0,0,0,.45)); }
+  #portrait.on { opacity: 1; }
+
+  #chapterBadge { position: absolute; top: 12px; left: 14px; z-index: 5; font-size: 12px; letter-spacing: .18em; color: #cfc9bc;
+    background: rgba(10,14,24,.7); padding: 3px 12px; border-radius: 12px; }
+  #chapterBadge:empty { display: none; }
+  #progress { position: absolute; top: 12px; right: 14px; z-index: 5; font-size: 12px; color: #cfc9bc;
+    background: rgba(10,14,24,.7); padding: 3px 12px; border-radius: 12px; }
+  #progress:empty { display: none; }
+  #logBtn { position: absolute; top: 34px; right: 14px; z-index: 6; font-family: inherit; font-size: 11.5px; letter-spacing: .12em;
+    color: var(--dim); background: rgba(10,14,24,.6); border: 1px solid rgba(255,255,255,.18); border-radius: 12px;
+    padding: 3px 12px; cursor: pointer; display: none; }
+  #logBtn:hover { color: var(--accent); border-color: var(--panel-line); }
+  #muteBtn { position: absolute; top: 34px; left: 14px; z-index: 6; font-family: inherit; font-size: 11.5px; letter-spacing: .1em;
+    color: var(--dim); background: rgba(10,14,24,.6); border: 1px solid rgba(255,255,255,.18); border-radius: 12px;
+    padding: 3px 12px; cursor: pointer; display: none; }
+  #muteBtn:hover { color: var(--accent); border-color: var(--panel-line); }
+
+  /* justify-content: flex-end は使わない（コンテンツが画面より長いとき上側がスクロール不能になるため）。
+     下寄せは .qwrap / .card の margin-top: auto で実現する */
+  #content { position: relative; z-index: 3; flex: 1; display: flex; flex-direction: column; padding: 16px; overflow-y: auto; }
+  .qwrap { margin-top: auto; }
+
+  /* テキストウィンドウ */
+  #textbox {
+    background: var(--panel); border: 1px solid var(--panel-line); border-radius: 10px;
+    padding: 18px 20px 22px; min-height: 148px; cursor: pointer; backdrop-filter: blur(3px);
+  }
+  #speaker { color: var(--accent); font-size: 13px; letter-spacing: .12em; margin-bottom: 8px; min-height: 1em; }
+  #line { font-size: 16px; line-height: 1.95; white-space: pre-wrap; }
+  #nextHint { text-align: right; color: var(--dim); font-size: 12px; margin-top: 6px; animation: blink 1.6s infinite; }
+  @keyframes blink { 50% { opacity: .2; } }
+
+  /* 選択肢 */
+  #choices { display: none; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+  .choice {
+    background: var(--panel); border: 1px solid var(--panel-line); border-radius: 10px;
+    color: var(--ink); font-family: inherit; font-size: 14.5px; line-height: 1.8;
+    padding: 13px 16px; text-align: left; cursor: pointer; transition: border .15s, transform .15s;
+  }
+  .choice:hover, .choice:focus { border-color: var(--accent); transform: translateY(-1px); outline: none; }
+
+  /* カード（章扉・注意書き・エンディング・解説） */
+  .card {
+    background: var(--panel); border: 1px solid var(--panel-line); border-radius: 12px;
+    padding: 26px 24px; margin: auto 0; backdrop-filter: blur(3px);
+  }
+  .card h1 { font-size: 26px; letter-spacing: .12em; color: var(--accent); margin-bottom: 14px; font-weight: 600; }
+  .card h2 { font-size: 19px; letter-spacing: .1em; color: var(--accent); margin-bottom: 12px; font-weight: 600; }
+  .card p { font-size: 14.5px; line-height: 2; margin-bottom: 12px; }
+  .card .sub { color: var(--dim); font-size: 13px; }
+  .btn {
+    display: inline-block; background: transparent; border: 1px solid var(--accent); color: var(--accent);
+    font-family: inherit; font-size: 14px; letter-spacing: .14em; border-radius: 24px;
+    padding: 11px 30px; margin-top: 10px; cursor: pointer; transition: background .2s;
+  }
+  .btn:hover { background: rgba(212, 169, 76, .14); }
+  .btn.secondary { border-color: var(--dim); color: var(--dim); }
+
+  .endbad h1 { color: var(--danger); }
+  .code { font-family: "SF Mono", Menlo, monospace; font-size: 30px; letter-spacing: .2em; color: var(--accent);
+          text-align: center; padding: 14px; border: 1px dashed var(--panel-line); border-radius: 8px; margin: 12px 0; user-select: all; }
+
+  /* ふりかえり解説 */
+  .qcard { border: 1px solid rgba(255,255,255,.12); border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+  .qcard .qtitle { color: var(--accent); font-size: 14px; margin-bottom: 8px; }
+  .opt { padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13.5px; line-height: 1.9; background: rgba(255,255,255,.03); }
+  .opt.chosen { border: 1px solid var(--accent); background: rgba(212,169,76,.08); }
+  .opt .tag { display: inline-block; font-size: 11.5px; letter-spacing: .08em; color: #0a0e18; background: var(--dim);
+              border-radius: 4px; padding: 1px 8px; margin-bottom: 6px; }
+  .opt.good .tag { background: #7fae8e; } .opt.risk .tag { background: var(--danger); color: #fff; }
+  .opt .you { float: right; color: var(--accent); font-size: 12px; letter-spacing: .1em; }
+  .routemap td { padding: 6px 10px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,.08); }
+  table.routemap { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+  .ghost { color: rgba(255,255,255,.22); }
+  .reached { color: var(--accent); }
+
+  /* テキストログ（読み返し用オーバーレイ） */
+  #logPanel { position: absolute; inset: 0; z-index: 20; background: rgba(6, 9, 18, .96); display: none;
+    flex-direction: column; padding: 18px 16px; }
+  #logPanel h3 { color: var(--accent); font-size: 14px; letter-spacing: .2em; margin-bottom: 12px; }
+  #logScroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 9px; padding-right: 4px; }
+  .logline { font-size: 13.5px; line-height: 1.9; color: var(--ink); border-bottom: 1px solid rgba(255,255,255,.06); padding-bottom: 9px; }
+  .logline .sp { color: var(--accent); font-size: 11.5px; letter-spacing: .12em; display: block; }
+  .logline.pickline { color: var(--accent); }
+  .logline.headline { color: var(--dim); text-align: center; letter-spacing: .2em; font-size: 12px; border-bottom: none; margin-top: 6px; }
+  #logClose { align-self: center; margin-top: 12px; }
+  #content::-webkit-scrollbar, #logScroll::-webkit-scrollbar { width: 6px; }
+  #content::-webkit-scrollbar-thumb, #logScroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="bg" class="bg-title"></div>
+  <img id="portrait" alt="">
+  <div id="chapterBadge"></div>
+  <div id="progress"></div>
+  <button id="logBtn">≡ ログ</button>
+  <button id="muteBtn" title="BGMの再生/停止">♪ BGM</button>
+  <div id="content"></div>
+  <div id="logPanel">
+    <h3>これまでのテキスト</h3>
+    <div id="logScroll"></div>
+    <button class="btn secondary" id="logClose">閉じる</button>
+  </div>
+</div>
+
+<!-- ?v= はキャッシュ対策。data.jsを更新したら番号を上げる -->
+<script src="data.js?v=6"></script>
+<script>
+(function () {
+  const $ = (sel) => document.querySelector(sel);
+  const content = $('#content'), bg = $('#bg');
+  const HINT = ('ontouchstart' in window) ? '▼ タップで進む' : '▼ クリックで進む';
+  let choices = [];   // 選択の内部ID列（15スロット）
+  let route = null;
+  let qIndex = 0;
+  let SIM = null;
+
+  /* ---------- テキストログ（読み返し） ---------- */
+  const LOG = [];
+  function logAdd(kind, line) {
+    LOG.push({ kind, line });
+  }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  $('#logBtn').onclick = () => {
+    const box = $('#logScroll');
+    box.innerHTML = LOG.map(e => {
+      if (e.kind === 'head') return `<div class="logline headline">${esc(e.line)}</div>`;
+      if (e.kind === 'pick') return `<div class="logline pickline">▶ ${esc(e.line)}</div>`;
+      if (typeof e.line === 'string') return `<div class="logline">${esc(e.line)}</div>`;
+      const spName = e.line.sp ? `<span class="sp">${esc(e.line.sp)}</span>` : '';
+      return `<div class="logline">${spName}${esc(e.line.t)}</div>`;
+    }).join('');
+    $('#logPanel').style.display = 'flex';
+    box.scrollTop = box.scrollHeight;
+  };
+  $('#logClose').onclick = () => { $('#logPanel').style.display = 'none'; };
+
+  /* ---------- 画像アセット（assets/ にファイルを置くと自動で使われる。無ければグラデーション） ---------- */
+  const ASSETS = 'assets/';
+  const assetOk = {}; // ファイル名 -> true/false（探索結果キャッシュ）
+  function probeAsset(name, cb) {
+    if (name in assetOk) { cb(assetOk[name]); return; }
+    const im = new Image();
+    im.onload = () => { assetOk[name] = true; cb(true); };
+    im.onerror = () => { assetOk[name] = false; cb(false); };
+    im.src = ASSETS + name;
+  }
+
+  function setBg(cls) {
+    bg.className = 'bg-' + cls;
+    bg.style.backgroundImage = '';
+    probeAsset(`bg_${cls}.png`, ok => {
+      if (ok && bg.className === 'bg-' + cls) {
+        bg.style.backgroundImage = `url(${ASSETS}bg_${cls}.png)`;
+        bg.style.backgroundSize = 'cover';
+        bg.style.backgroundPosition = 'center';
+      }
+    });
+  }
+
+  /* 立ち絵: 話者名 -> ファイル名。assets/char_*.png があるときだけ表示 */
+  const CHAR_FILES = { '内村': 'char_uchimura', '三好': 'char_miyoshi', '戸田': 'char_toda',
+                       '野口': 'char_noguchi', '柏木': 'char_kashiwagi', '部長': 'char_bucho' };
+  const portrait = $('#portrait');
+  let portraitSeq = 0; // 非同期読み込みの追い越し防止（速いクリックで前の話者が後から出るのを防ぐ）
+  // face: 1=標準（省略時）／2=シート中央の表情／3=シート右の表情。差分ファイルが無ければ標準に自動フォールバック
+  function setPortrait(sp, face) {
+    const file = sp && CHAR_FILES[sp];
+    if (!file) { if (!sp) return; portraitSeq++; portrait.classList.remove('on'); return; } // 未知話者は消す・地の文は維持
+    const seq = ++portraitSeq;
+    const show = (name) => { portrait.src = `${ASSETS}${name}.png`; portrait.classList.add('on'); };
+    const variant = (face && face > 1) ? `${file}_${face}` : file;
+    probeAsset(`${variant}.png`, ok => {
+      if (seq !== portraitSeq) return; // すでに別の話者・表情に切り替わっている
+      if (ok) { show(variant); return; }
+      if (variant === file) { portrait.classList.remove('on'); return; }
+      probeAsset(`${file}.png`, ok2 => { // 差分なし→標準にフォールバック
+        if (seq !== portraitSeq) return;
+        if (ok2) show(file); else portrait.classList.remove('on');
+      });
+    });
+  }
+  function hidePortrait() { portraitSeq++; portrait.classList.remove('on'); }
+
+  /* ---------- BGM（assets/bgm_◯◯.mp3 を置くと自動で鳴る。無ければ無音のまま） ----------
+     スロット: daily(第1・2章) / tension(第3章) / end_best / end_normal / end_bad */
+  const bgmEl = new Audio();
+  bgmEl.loop = true; bgmEl.volume = 0;
+  const BGM_VOL = 0.35;
+  let bgmCur = null, bgmTimer = null, bgmPending = false;
+  const audioOk = {};   // url -> true/false（探索済み）
+  const audioWait = {}; // url -> 待機中コールバック列（同時プローブの衝突防止）
+  function probeAudio(url, cb) {
+    if (url in audioOk) { cb(audioOk[url]); return; }
+    if (audioWait[url]) { audioWait[url].push(cb); return; }
+    audioWait[url] = [cb];
+    const a = new Audio();
+    const done = v => {
+      if (url in audioOk) return;
+      audioOk[url] = v;
+      const cbs = audioWait[url]; delete audioWait[url];
+      cbs.forEach(f => f(v));
+    };
+    a.oncanplaythrough = () => done(true);
+    a.onerror = () => done(false);
+    a.src = url;
+  }
+  function bgmFadeTo(target, done) {
+    clearInterval(bgmTimer);
+    bgmTimer = setInterval(() => {
+      const d = target - bgmEl.volume;
+      if (Math.abs(d) < 0.06) { bgmEl.volume = target; clearInterval(bgmTimer); if (done) done(); }
+      else bgmEl.volume = Math.min(1, Math.max(0, bgmEl.volume + (d > 0 ? 0.06 : -0.06)));
+    }, 30);
+  }
+  function setBgm(slot) {
+    if (slot === bgmCur) return;
+    bgmCur = slot;
+    if (!bgmEl.paused) bgmFadeTo(0); // プローブを待たずに先へフェードアウト開始（切替を速く）
+    const exts = ['mp3', 'wav', 'm4a'];
+    (function tryExt(i) {
+      if (bgmCur !== slot) return;
+      if (i >= exts.length) { bgmFadeTo(0, () => bgmEl.pause()); return; } // 曲ファイルなし→静かに止める
+      const url = `${ASSETS}bgm_${slot}.${exts[i]}`;
+      probeAudio(url, ok => {
+        if (bgmCur !== slot) return;
+        if (!ok) { tryExt(i + 1); return; }
+        const start = () => {
+          bgmEl.src = url;
+          const p = bgmEl.play();
+          if (p) p.catch(() => { bgmPending = true; }); // 自動再生制限→次のクリックで再開
+          bgmFadeTo(BGM_VOL);
+          $('#muteBtn').style.display = '';
+        };
+        if (bgmEl.paused || bgmEl.volume < 0.06) start();
+        else bgmFadeTo(0, start);
+      });
+    })(0);
+  }
+  // チュートリアル中に全曲を先読みしておく（本編開始時に即・クリック文脈内で再生できる）
+  function preloadBgm() {
+    ['daily', 'tension', 'end_best', 'end_normal', 'end_bad']
+      .forEach(s => probeAudio(`${ASSETS}bgm_${s}.mp3`, () => {}));
+  }
+  // ブラウザの自動再生制限対策: 最初のユーザー操作でペンディング中のBGMを再生
+  document.addEventListener('click', () => {
+    if (bgmPending && bgmEl.src) { bgmPending = false; bgmEl.play().catch(() => {}); }
+  }, true);
+  $('#muteBtn').onclick = () => {
+    bgmEl.muted = !bgmEl.muted;
+    $('#muteBtn').textContent = bgmEl.muted ? '✕ BGM' : '♪ BGM';
+  };
+
+  function setBadge(text) { $('#chapterBadge').textContent = text; }
+  function setProgress(n) { $('#progress').textContent = n ? `選択 ${n} / 15` : ''; }
+
+  function card(html) { hidePortrait(); content.innerHTML = `<div class="card">${html}</div>`; content.scrollTop = 0; }
+
+  /* ---------- 導入画面 ---------- */
+  function showTitle() {
+    setBg('title'); setBadge(''); setProgress('');
+    // チュートリアル（タイトル・注意書き）は無音。BGMは本編（Q1）から
+    $('#logBtn').style.display = 'none';
+    card(`
+      <p class="sub">管理職ハラスメント研修 事前課題</p>
+      <h1>課長 一年目の選択</h1>
+      <p>あなたは今日、営業2課の課長になった。<br>部下は5人。一年は15の選択でできている。</p>
+      <p class="sub">プレイ時間 15〜20分／画面右上の「≡ ログ」でいつでも本文を読み返せます</p>
+      <button class="btn" onclick="APP.next('notice1')">はじめる</button>
+    `);
+  }
+
+  function showNotice1() {
+    preloadBgm(); // 注意書きを読んでいる間に全曲を先読み
+    card(`
+      <h2>はじめに（1/2）</h2>
+      <p>本作は研修用フィクションです。実在の人物・団体とは関係ありません。登場する「良くない選択肢」は、誰の心にもある判断の癖を体験するためのものです。</p>
+      <p>作中にメンタル不調に関する描写が含まれます。つらいと感じた場合は、いつでも中断してください。</p>
+      <button class="btn" onclick="APP.next('notice2')">次へ</button>
+    `);
+  }
+
+  function showNotice2() {
+    card(`
+      <h2>はじめに（2/2）— 結果コードについて</h2>
+      <p>このゲームの選択に「成績」はありません。最後に表示される<b>結果コード</b>は、研修当日、グループでの学び合いの素材としてのみ使います。<b>人事評価には一切使用しません。</b></p>
+      <p>むしろ、バッドエンドにたどり着いた方の話が、当日いちばん場を深くします。「こう選んだら、こうなった」を持ってきてください。<b>それがこの課題の正解です。</b></p>
+      <p class="sub">あなたの選択がこの端末の外に自動送信されることはありません。</p>
+      <button class="btn" onclick="APP.next('ch1')">了解して、はじめる</button>
+    `);
+  }
+
+  function chapterCard(no, title, sub, nextKey) {
+    setBg('title');
+    logAdd('head', `第${no}章　${title}`);
+    card(`
+      <p class="sub">第${no}章</p>
+      <h1>${title}</h1>
+      <p>${sub}</p>
+      <button class="btn" onclick="APP.next('${nextKey}')">進む</button>
+    `);
+  }
+
+  /* ---------- 設問の取得（スロット→設問オブジェクト） ---------- */
+  function questionAt(i) {
+    if (i < 10) return GAME.COMMON1[i];
+    if (i === 10) return GAME.Q11[route];
+    if (i === 11) {
+      const q = Object.assign({}, GAME.Q12);
+      q.scene = [q.scene[0], { sp: '人事', t: GAME.Q12_INTRO[route] }, q.scene[2]];
+      return q;
+    }
+    if (i === 12) {
+      const q = Object.assign({}, GAME.Q13);
+      q.scene = [q.scene[0], `今年は特に、${GAME.Q13_PARTNER[route]}との面談に時間を取りたいと感じている。`, q.scene[2]];
+      return q;
+    }
+    if (i === 13) return GAME.Q14[route];
+    return GAME.Q15;
+  }
+
+  /* ---------- シーン進行 ----------
+     行データ: 文字列（地の文） または {sp:'話者', t:'セリフ'} */
+  function renderLine(line) {
+    const sp = $('#speaker'), tx = $('#line');
+    // sp=セリフの話者（名前プレート＋立ち絵）／show=地の文でも立ち絵だけ出す（名前プレートなし）
+    if (typeof line === 'string') { sp.textContent = ''; tx.textContent = line; setPortrait(null); }
+    else { sp.textContent = line.sp || ''; tx.textContent = line.t || ''; setPortrait(line.sp || line.show, line.face); }
+    logAdd('line', line);
+  }
+
+  function playQuestion(i) {
+    qIndex = i;
+    const q = questionAt(i);
+    setBg(q.place); setBadge(`第${q.chapter}章　${q.title}`); setProgress(i + 1);
+    setBgm(q.chapter === 3 ? 'tension' : 'daily');
+    hidePortrait(); // 場面転換で立ち絵をリセット
+    $('#logBtn').style.display = '';
+    logAdd('head', q.title);
+    let li = 0;
+    content.innerHTML = `
+      <div class="qwrap">
+        <div id="choices"></div>
+        <div id="textbox"><div id="speaker"></div><div id="line"></div><div id="nextHint">${HINT}</div></div>
+      </div>`;
+    const box = $('#textbox');
+    function showLine() {
+      if (li < q.scene.length) { renderLine(q.scene[li++]); }
+      else { showChoices(q); box.style.cursor = 'default'; $('#nextHint').style.display = 'none'; box.onclick = null; }
+    }
+    box.onclick = showLine;
+    showLine();
+  }
+
+  function showChoices(q) {
+    const wrap = $('#choices');
+    wrap.style.display = 'flex';
+    // 表示順シャッフル（記録は内部ID）
+    const order = q.options.map((_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1)); [order[i], order[j]] = [order[j], order[i]];
+    }
+    order.forEach(idx => {
+      const b = document.createElement('button');
+      b.className = 'choice'; b.textContent = q.options[idx].text;
+      b.onclick = () => pick(idx);
+      wrap.appendChild(b);
+    });
+  }
+
+  function pick(idx) {
+    choices.push(idx);
+    const q = questionAt(qIndex);
+    logAdd('pick', q.options[idx].text);
+    const react = q.options[idx].react || [];
+    if (!react.length) { proceed(qIndex); return; }
+    // 反応シーン: 選択肢を消してテキストウィンドウで相手の反応を流す
+    const wrap = $('#choices');
+    wrap.style.display = 'none'; wrap.innerHTML = '';
+    const box = $('#textbox');
+    box.style.cursor = 'pointer'; $('#nextHint').style.display = '';
+    let ri = 0;
+    function step() {
+      if (ri < react.length) { renderLine(react[ri++]); }
+      else { box.onclick = null; proceed(qIndex); }
+    }
+    box.onclick = step;
+    step();
+  }
+
+  function proceed(i) {
+    if (i === 9) { // Q10終了 → ルート判定
+      const st = { R: 0, M: 0, T: 0, G: 0, H: 0, D: 0 };
+      for (let k = 0; k < 10; k++) {
+        const fx = GAME.COMMON1[k].options[choices[k]].fx;
+        for (const p of ['R', 'M', 'T', 'G', 'H', 'D']) if (fx[p]) st[p] += fx[p];
+      }
+      route = st.M >= 4 ? 'kanchigai' : st.R >= 5 ? 'kyoken' : st.G >= 4 ? 'hounin' : 'shinrai';
+      showChapter3Card();
+    } else if (i === 4) {
+      chapterCard(2, '繁忙期', '7月。数字と納期が、課の空気を少しずつ変えていく。', 'q5idx'); // → Q6 (index 5)
+    } else if (i === 13 && route === 'shinrai') {
+      showMiyoshiEpilogue();
+    } else if (i === 14) {
+      finish();
+    } else {
+      playQuestion(i + 1);
+    }
+  }
+
+  function showChapter3Card() {
+    const r = GAME.ROUTES[route];
+    setBg('title');
+    setBgm('tension'); // 第3章の扉で先に切り替える（Q11開始まで待たない）
+    logAdd('head', `第3章　${r.name}`);
+    card(`
+      <p class="sub">第3章</p>
+      <h1>${r.name}</h1>
+      <p>${r.desc}</p>
+      <p class="sub">ここから先の出来事は、あなたのこれまでの選択が決めました。<br>直面する問題の数や内容は、人によって異なります。これは仕様です。</p>
+      <button class="btn" onclick="APP.next('q11')">進む</button>
+    `);
+  }
+
+  function showMiyoshiEpilogue() {
+    setBg('meeting'); setBadge('第3章　面談のあとで');
+    setPortrait('三好', 3); // 心からの笑顔（受け手視点の告白シーン）
+    logAdd('line', { sp: '三好', t: GAME.MIYOSHI_EPILOGUE });
+    content.innerHTML = `
+      <div class="qwrap">
+        <div id="textbox"><div id="speaker">三好</div><div id="line">${esc(GAME.MIYOSHI_EPILOGUE)}</div>
+        <div id="nextHint">${HINT}</div></div>
+      </div>`;
+    $('#textbox').onclick = () => playQuestion(14);
+  }
+
+  /* ---------- エンディング ---------- */
+  function finish() {
+    SIM = GAME.simulate(choices);
+    const e = GAME.ENDINGS[SIM.ending];
+    setBg(e.kind === 'best' ? 'end_best' : e.kind === 'bad' ? 'end_bad' : 'end_normal');
+    setBgm('end_' + e.kind);
+    setBadge(''); setProgress('');
+    card(`
+      <div class="${e.kind === 'bad' ? 'endbad' : ''}">
+      <p class="sub">エンディング</p>
+      <h1>${e.title}</h1>
+      ${e.body.map(p => `<p>${esc(p)}</p>`).join('')}
+      <button class="btn" onclick="APP.next('timeline')">分岐をふりかえる</button>
+      </div>
+    `);
+  }
+
+  function showTimeline() {
+    const keyParam = GAME.ROUTE_PARAM[SIM.route];
+    const rows = SIM.log.map((entry) => {
+      const fx = entry.opt.fx || {};
+      const hit = (keyParam && fx[keyParam]) || (SIM.ending === 'E6' && fx.H) || entry.opt.decisive;
+      const t = entry.opt.text.length > 34 ? entry.opt.text.slice(0, 34) + '…' : entry.opt.text;
+      return `<tr><td class="${hit ? 'reached' : ''}">${esc(entry.q.title)}</td>
+        <td class="${hit ? 'reached' : ''}">${esc(t)}${entry.opt.decisive ? '　◆' : ''}</td></tr>`;
+    }).join('');
+    card(`
+      <h2>あなたの一年　—— 分岐の年表</h2>
+      <p class="sub">${GAME.ENDINGS[SIM.ending].kind === 'bad' ? '金色の行が、このエンディングへ向かう分かれ道でした。◆は決定打です。' : '金色の行が、あなたの一年を特徴づけた選択です。'}</p>
+      <table class="routemap">${rows}</table>
+      <button class="btn" onclick="APP.next('kaisetsu')">ふりかえり解説を読む</button>
+    `);
+  }
+
+  function showKaisetsu() {
+    const cards = SIM.log.map((entry) => {
+      const opts = entry.q.options.map(o => {
+        const chosen = o === entry.opt;
+        const good = o.expl.tag.startsWith('適切');
+        return `<div class="opt ${chosen ? 'chosen' : ''} ${good ? 'good' : 'risk'}">
+          ${chosen ? '<span class="you">あなたの選択</span>' : ''}
+          <span class="tag">${esc(o.expl.tag)}</span><br>
+          <span class="sub">${esc(o.text)}</span><br>${esc(o.expl.body)}</div>`;
+      }).join('');
+      return `<div class="qcard"><div class="qtitle">${esc(entry.q.id)}　${esc(entry.q.title)}</div>${opts}</div>`;
+    }).join('');
+    card(`
+      <h2>ふりかえり解説</h2>
+      <p class="sub">あなたに出題された全${SIM.log.length}問について、すべての選択肢の解説です。選んだ人を責めるためのものではありません——どの選択も、現実の職場で毎日誰かが選んでいます。</p>
+      ${cards}
+      <button class="btn" onclick="APP.next('routemap')">全ルートマップを見る</button>
+    `);
+  }
+
+  function showRouteMap() {
+    const rows = [
+      ['kanchigai', 'E4 勘違いの代償'],
+      ['kyoken', 'E3 懲戒解雇'],
+      ['hounin', 'E5 チーム崩壊'],
+      ['shinrai', 'E1 任せられる課長／E6 静かな職場'],
+    ].map(([rid, ends]) => {
+      const mine = rid === SIM.route;
+      return `<tr><td class="${mine ? 'reached' : 'ghost'}">${mine ? '▶ ' : ''}${esc(GAME.ROUTES[rid].name)}${mine ? '' : '（未踏）'}</td>
+        <td class="${mine ? 'reached' : 'ghost'}">${mine ? esc(ends) : '？？？'}</td></tr>`;
+    }).join('');
+    card(`
+      <h2>全ルートマップ</h2>
+      <p class="sub">この物語には4つのルートと6つのエンディングがあります。あなたが歩いたのは、そのうちの一本だけです。</p>
+      <table class="routemap">${rows}</table>
+      <p class="sub">未踏のルートの解説は、2周目または研修当日の配布資料で読めます。どのエンドでも「E2 一年目、まだ道半ば」に合流する場合があります。</p>
+      <button class="btn" onclick="APP.next('code')">結果コードを表示する</button>
+    `);
+  }
+
+  function showCode() {
+    const code = GAME.encodeCode(choices);
+    card(`
+      <h2>結果コード</h2>
+      <p>研修当日、このコードをお持ちください（スクリーンショット推奨）。</p>
+      <div class="code">${code}</div>
+      <p class="sub">コードにはあなたの選択と到達エンディングだけが含まれます。氏名や端末の情報は含まれず、どこにも送信されていません。</p>
+      <p class="sub">到達エンディング: 『${esc(GAME.ENDINGS[SIM.ending].title)}』</p>
+      <button class="btn secondary" onclick="window.location.reload()">別の一年を生きてみる（最初から）</button>
+    `);
+  }
+
+  /* ---------- 画面遷移 ---------- */
+  const APP = {
+    next(key) {
+      if (key === 'notice1') showNotice1();
+      else if (key === 'notice2') showNotice2();
+      else if (key === 'ch1') chapterCard(1, '着任', '4月。あなたは営業2課の課長になった。', 'q1');
+      else if (key === 'q1') playQuestion(0);
+      else if (key === 'q5idx') playQuestion(5);
+      else if (key === 'q11') playQuestion(10);
+      else if (key === 'timeline') showTimeline();
+      else if (key === 'kaisetsu') showKaisetsu();
+      else if (key === 'routemap') showRouteMap();
+      else if (key === 'code') showCode();
+    },
+  };
+  window.APP = APP;
+  window.__bgm = { el: bgmEl, set: setBgm }; // デバッグ・検証用
+  showTitle();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>講師用復号ページ｜課長 一年目の選択</title>
+<style>
+  :root { --ink: #2a2a2a; --dim: #777; --accent: #8a6a1f; --navy: #062651; --risk: #a33f30; --good: #2e6b48; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "Hiragino Sans", "Yu Gothic", sans-serif; color: var(--ink); background: #f4f1ea; padding: 28px 16px; }
+  main { max-width: 820px; margin: 0 auto; }
+  h1 { font-size: 20px; color: var(--navy); margin-bottom: 4px; }
+  .sub { color: var(--dim); font-size: 12.5px; margin-bottom: 18px; }
+  .panel { background: #fff; border: 1px solid #ddd6c8; border-radius: 10px; padding: 18px 20px; margin-bottom: 16px; }
+  input[type=text] { font-family: Menlo, monospace; font-size: 22px; letter-spacing: .15em; padding: 10px 14px;
+    border: 1px solid #ccc; border-radius: 8px; width: 240px; text-transform: uppercase; }
+  button { font-family: inherit; font-size: 14px; padding: 10px 26px; margin-left: 10px; border-radius: 8px;
+    border: 1px solid var(--navy); background: var(--navy); color: #fff; cursor: pointer; }
+  button:hover { opacity: .88; }
+  .error { color: var(--risk); margin-top: 10px; font-size: 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #eee4d0; vertical-align: top; }
+  th { color: var(--dim); font-weight: 600; font-size: 12px; }
+  .risk { color: var(--risk); } .good { color: var(--good); }
+  .badge { display: inline-block; font-size: 11px; border-radius: 4px; padding: 1px 8px; color: #fff; }
+  .b-risk { background: var(--risk); } .b-good { background: var(--good); } .b-mid { background: #999; }
+  .kv { display: flex; gap: 26px; flex-wrap: wrap; }
+  .kv div b { font-size: 17px; color: var(--navy); display: block; }
+  .kv div { font-size: 12px; color: var(--dim); }
+  .note { font-size: 12px; color: var(--dim); line-height: 1.8; }
+</style>
+</head>
+<body>
+<script>
+/* 簡易パスコードゲート（講師用）。本格的な認証ではなく、受講者が偶然開くのを防ぐ目的。
+   パスコード変更はこの1行を書き換える */
+(function () {
+  var KEY = 'hng_teacher_ok';
+  if (sessionStorage.getItem(KEY) === '1') return;
+  var pw = prompt('講師用ページです。パスコードを入力してください');
+  if (pw === 'kacho2026') { sessionStorage.setItem(KEY, '1'); }
+  else { location.replace('./'); }
+})();
+</script>
+
+<main>
+  <h1>講師用 結果コード復号ページ</h1>
+  <p class="sub">『課長 一年目の選択』——このページは講師専用です。復号結果の個人別内容は人事へ共有せず、集計（エンド分布等）のみ共有する運用です。</p>
+
+  <div class="panel">
+    <label>結果コード：<input type="text" id="codeInput" placeholder="K7XM-2PQ" autocomplete="off"></label>
+    <button onclick="decode()">復号</button>
+    <div class="error" id="err"></div>
+  </div>
+
+  <div id="result"></div>
+
+  <div class="panel note">
+    ・コードはチェック文字つきのため、写し間違いは検出されます（改変を完全には防げません）。<br>
+    ・「あなたの選択」欄の判定は解説タグに基づく参考表示です。当日の対話では、選択の背景（なぜそう選んだか）を聞くことを優先してください。
+  </div>
+</main>
+
+<!-- ?v= はキャッシュ対策。data.jsを更新したら番号を上げる（index.html と合わせる） -->
+<script src="data.js?v=6"></script>
+<script>
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+function decode(){
+  const err = document.getElementById('err'), out = document.getElementById('result');
+  err.textContent = ''; out.innerHTML = '';
+  const r = GAME.decodeCode(document.getElementById('codeInput').value);
+  if (r.error) { err.textContent = r.error; return; }
+  const sim = r.sim;
+  const e = GAME.ENDINGS[sim.ending];
+  const rows = sim.log.map((entry, i) => {
+    const tag = entry.opt.expl.tag;
+    const good = tag.startsWith('適切');
+    const cls = good ? 'b-good' : (entry.opt.decisive || /決定打|リスク|攻撃|侵害|マタハラ|セクハラ|不作為|転嫁|探索/.test(tag)) ? 'b-risk' : 'b-mid';
+    return `<tr>
+      <td>${entry.q.id}</td>
+      <td>${esc(entry.q.title)}</td>
+      <td>${esc(entry.opt.text)}${entry.opt.decisive ? '　<b class="risk">◆決定打</b>' : ''}</td>
+      <td><span class="badge ${cls}">${esc(tag)}</span></td>
+    </tr>`;
+  }).join('');
+  out.innerHTML = `
+    <div class="panel">
+      <div class="kv">
+        <div>到達エンディング<b>${e.title}（${sim.ending}）</b></div>
+        <div>第3章ルート<b>${GAME.ROUTES[sim.route].name}</b></div>
+        <div>設問数<b>${sim.log.length}問</b></div>
+      </div>
+    </div>
+    <div class="panel">
+      <table>
+        <tr><th>問</th><th>場面</th><th>選択した内容</th><th>解説タグ</th></tr>
+        ${rows}
+      </table>
+    </div>`;
+}
+document.getElementById('codeInput').addEventListener('keydown', ev => { if (ev.key === 'Enter') decode(); });
+</script>
+</body>
+</html>
