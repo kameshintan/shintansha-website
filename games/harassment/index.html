@@ -46,10 +46,12 @@
     color: var(--dim); background: rgba(10,14,24,.6); border: 1px solid rgba(255,255,255,.18); border-radius: 12px;
     padding: 3px 12px; cursor: pointer; display: none; }
   #logBtn:hover { color: var(--accent); border-color: var(--panel-line); }
-  #muteBtn { position: absolute; top: 34px; left: 14px; z-index: 6; font-family: inherit; font-size: 11.5px; letter-spacing: .1em;
+  #muteBtn { position: absolute; top: 12px; left: 14px; z-index: 6; font-family: inherit; font-size: 11.5px; letter-spacing: .1em;
     color: var(--dim); background: rgba(10,14,24,.6); border: 1px solid rgba(255,255,255,.18); border-radius: 12px;
-    padding: 3px 12px; cursor: pointer; display: none; }
+    padding: 3px 12px; cursor: pointer; }
   #muteBtn:hover { color: var(--accent); border-color: var(--panel-line); }
+  /* 章バッジはBGMボタンの下にずらす（両方常時表示のため） */
+  #chapterBadge { top: 38px !important; }
 
   /* justify-content: flex-end は使わない（コンテンツが画面より長いとき上側がスクロール不能になるため）。
      下寄せは .qwrap / .card の margin-top: auto で実現する */
@@ -242,11 +244,19 @@
     a.onerror = () => done(false);
     a.src = url;
   }
+  // iOS Safariは<audio>のvolumeへの代入を無視する（常に1のまま）。
+  // その環境でフェード完了待ちをすると切替処理が永遠に実行されないため、
+  // ①音量制御の可否を起動時に判定 ②フェードには回数上限の安全弁、の二重対策を入れる
+  let volOK = true;
+  try { bgmEl.volume = 0.5; volOK = Math.abs(bgmEl.volume - 0.5) < 0.01; bgmEl.volume = 0; } catch (e) { volOK = false; }
   function bgmFadeTo(target, done) {
     clearInterval(bgmTimer);
+    if (!volOK) { try { bgmEl.volume = target; } catch (e) {} if (done) done(); return; } // フェード不可→即時切替
+    let ticks = 0;
     bgmTimer = setInterval(() => {
+      ticks++;
       const d = target - bgmEl.volume;
-      if (Math.abs(d) < 0.06) { bgmEl.volume = target; clearInterval(bgmTimer); if (done) done(); }
+      if (Math.abs(d) < 0.06 || ticks > 40) { bgmEl.volume = target; clearInterval(bgmTimer); if (done) done(); }
       else bgmEl.volume = Math.min(1, Math.max(0, bgmEl.volume + (d > 0 ? 0.06 : -0.06)));
     }, 30);
   }
@@ -267,7 +277,6 @@
           const p = bgmEl.play();
           if (p) p.catch(() => { bgmPending = true; }); // 自動再生制限→次のクリックで再開
           bgmFadeTo(BGM_VOL);
-          $('#muteBtn').style.display = '';
         };
         if (bgmEl.paused || bgmEl.volume < 0.06) start();
         else bgmFadeTo(0, start);
@@ -573,7 +582,7 @@
     },
   };
   window.APP = APP;
-  window.__bgm = { el: bgmEl, set: setBgm }; // デバッグ・検証用
+  window.__bgm = { el: bgmEl, set: setBgm, simulateNoVolume: () => { volOK = false; } }; // デバッグ・検証用
   showTitle();
 })();
 </script>
