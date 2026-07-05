@@ -727,8 +727,15 @@ const GAME = (function () {
         '部長が査定面談で言った。「君の課は問題を起こさないな。……で、何かを起こしたことはあるのか？」',
         'ハラスメントを恐れて何もしないのは、マネジメントの放棄である。あなたの静かな職場は、その証明として、静かに沈んでいった。',
       ] },
+    E7: { no: 6, kind: 'normal', title: '何も起きなかった一年',
+      body: [
+        '3月31日。表面上は、何も起きなかった。クレームも、休職も、退職も、今年はなかった。',
+        'ただ、あなたが知らないだけかもしれない。誰かが転職サイトのプロフィールを八割まで埋めていること。誰かが相談窓口のページを、開いては閉じていること。飲み会の帰り道で、あなたの口癖が笑いのネタになっていること。',
+        'この一年で積み上がったものは、精算されていない。ただ、まだ落ちてきていないだけだ。',
+        '来期のあなたは、今年のあなたが作った請求書を受け取ることになる。——何も起きなかった。それが、一番危うい報告だった。',
+      ] },
   };
-  const ENDING_IDS = ['E1', 'E2', 'E3', 'E4', 'E5', 'E6'];
+  const ENDING_IDS = ['E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7'];
 
   /* ---------- パラメータエンジン ---------- */
 
@@ -779,14 +786,16 @@ const GAME = (function () {
     const o15 = Q15.options[choices[14]];
     applyFx(state, o15.fx, route); log.push({ q: Q15, opt: o15 });
 
-    // エンディング判定
+    // エンディング判定（バッド確定はルート突入と同じ閾値。Q13修復-2で下回れば回避可能）
     let ending;
-    if (route === 'kyoken'    && o14.decisive && state.R >= 6) ending = 'E3';
-    else if (route === 'kanchigai' && o14.decisive && state.M >= 5) ending = 'E4';
-    else if (route === 'hounin'    && o14.decisive && state.G >= 5) ending = 'E5';
-    else if (state.H >= 5) ending = 'E6';
+    if (route === 'kyoken'    && o14.decisive && state.R >= 5) ending = 'E3';
+    else if (route === 'kanchigai' && o14.decisive && state.M >= 4) ending = 'E4';
+    else if (route === 'hounin'    && o14.decisive && state.G >= 4) ending = 'E5';
+    else if (state.H >= 4) ending = 'E6';
     else if (route === 'shinrai' && o14.best && state.T >= 6 &&
              state.R <= 2 && state.M <= 1 && state.G <= 1) ending = 'E1';
+    // リスクを抱えたまま決定打だけ避けた場合はダークノーマル（何も起きなかった≠無事だった）
+    else if (state.R >= 5 || state.M >= 4 || state.G >= 4) ending = 'E7';
     else ending = 'E2';
 
     return { state, route, ending, log };

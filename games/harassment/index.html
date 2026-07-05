@@ -143,7 +143,7 @@
 </div>
 
 <!-- ?v= はキャッシュ対策。data.jsを更新したら番号を上げる -->
-<script src="data.js?v=6"></script>
+<script src="data.js?v=7"></script>
 <script>
 (function () {
   const $ = (sel) => document.querySelector(sel);
@@ -498,7 +498,11 @@
   }
 
   function showTimeline() {
-    const keyParam = GAME.ROUTE_PARAM[SIM.route];
+    let keyParam = GAME.ROUTE_PARAM[SIM.route];
+    if (SIM.ending === 'E7') { // ダークノーマル: 積み上がったパラメータを金色でハイライト
+      const s = SIM.state;
+      keyParam = (s.R >= 5 && 'R') || (s.M >= 4 && 'M') || (s.G >= 4 && 'G') || keyParam;
+    }
     const rows = SIM.log.map((entry) => {
       const fx = entry.opt.fx || {};
       const hit = (keyParam && fx[keyParam]) || (SIM.ending === 'E6' && fx.H) || entry.opt.decisive;
@@ -539,7 +543,7 @@
       ['kanchigai', 'E4 勘違いの代償'],
       ['kyoken', 'E3 懲戒解雇'],
       ['hounin', 'E5 チーム崩壊'],
-      ['shinrai', 'E1 任せられる課長／E6 静かな職場'],
+      ['shinrai', 'E1 任せられる課長'],
     ].map(([rid, ends]) => {
       const mine = rid === SIM.route;
       return `<tr><td class="${mine ? 'reached' : 'ghost'}">${mine ? '▶ ' : ''}${esc(GAME.ROUTES[rid].name)}${mine ? '' : '（未踏）'}</td>
@@ -547,9 +551,9 @@
     }).join('');
     card(`
       <h2>全ルートマップ</h2>
-      <p class="sub">この物語には4つのルートと6つのエンディングがあります。あなたが歩いたのは、そのうちの一本だけです。</p>
+      <p class="sub">この物語には4つのルートと7つのエンディングがあります。あなたが歩いたのは、そのうちの一本だけです。</p>
       <table class="routemap">${rows}</table>
-      <p class="sub">未踏のルートの解説は、2周目または研修当日の配布資料で読めます。どのエンドでも「E2 一年目、まだ道半ば」に合流する場合があります。</p>
+      <p class="sub">このほか全ルート共通で「E2 一年目、まだ道半ば」「E7 何も起きなかった一年」、関わりを避け続けた先の「E6 静かな職場」があります。未踏のルートの解説は、2周目または研修当日の配布資料で読めます。</p>
       <button class="btn" onclick="APP.next('code')">結果コードを表示する</button>
     `);
   }
