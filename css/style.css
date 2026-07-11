@@ -379,3 +379,9 @@ a { color: var(--blue); text-decoration: none; }
   .hero { padding: 64px 0 60px; }
   .hero .hero-waves { display: none; }
 }
+
+
+/* 主力研修6本: 3列×2行固定（5+1の孤立防止） */
+.main6-grid { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 900px) { .main6-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .main6-grid { grid-template-columns: 1fr; } }
