@@ -294,6 +294,16 @@ a { color: var(--blue); text-decoration: none; }
 .profile-head .intro .kana { font-size: 0.8rem; color: var(--ink-soft); margin-bottom: 12px; }
 
 /* 研修→組織開発の橋 */
+.lead-note {
+  background: var(--mist);
+  border-left: 4px solid var(--blue);
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px;
+  margin-bottom: 36px;
+  font-size: 0.95rem;
+}
+.lead-note a { color: var(--blue); text-decoration: underline; }
+
 .bridge {
   margin-top: 56px; background: var(--mist);
   border-left: 4px solid var(--blue); border-radius: 0 8px 8px 0;
