@@ -231,7 +231,7 @@ a { color: var(--blue); text-decoration: none; }
 
 /* ---------- 下層ページ ---------- */
 .page-hero {
-  background: linear-gradient(150deg, var(--blue), var(--blue-deep));
+  background: linear-gradient(150deg, var(--blue) 0%, var(--blue) 55%, var(--blue-deep) 100%);
   color: #fff; padding: 64px 0 56px;
   position: relative; overflow: hidden;
 }
