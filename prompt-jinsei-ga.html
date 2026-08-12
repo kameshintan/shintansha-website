@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人生を一枚の絵にするプロンプト｜株式会社新譚舎</title>
+<meta name="robots" content="noindex, nofollow">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DV5NEM0YHJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DV5NEM0YHJ');
+</script>
+<link rel="icon" href="assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="css/style.css?v=13">
+<style>
+  .prompt-wrap { max-width: 860px; margin: 0 auto; padding: 48px 20px 72px; }
+  .prompt-head { border-bottom: 1px solid var(--line); padding-bottom: 20px; margin-bottom: 28px; }
+  .prompt-head .cat { display: inline-block; font-size: 12px; letter-spacing: .18em; color: var(--blue-light); margin-bottom: 8px; }
+  .prompt-head h1 { font-family: var(--head); font-size: 26px; line-height: 1.5; color: var(--blue-deep); }
+  .prompt-head p.note { margin-top: 12px; font-size: 14px; color: var(--ink-soft); }
+
+  .copybar { position: sticky; top: 0; z-index: 5; background: var(--paper);
+             padding: 12px 0; border-bottom: 1px solid var(--line); margin-bottom: 20px;
+             display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .btn-copy { appearance: none; border: 0; cursor: pointer; font-family: var(--sans);
+              background: var(--blue); color: #fff; font-size: 15px; font-weight: 600;
+              padding: 12px 26px; border-radius: 4px; letter-spacing: .04em;
+              transition: background .2s ease; }
+  .btn-copy:hover { background: var(--blue-deep); }
+  .btn-copy.done { background: #3f7a5c; }
+  .copy-msg { font-size: 13px; color: var(--ink-soft); }
+
+  .prompt-box { background: var(--mist); border: 1px solid var(--line); border-radius: 4px;
+                padding: 24px; }
+  .prompt-box pre { margin: 0; font-family: "SFMono-Regular", "Menlo", "Consolas",
+                    "Hiragino Kaku Gothic ProN", monospace;
+                    font-size: 13.5px; line-height: 1.9; color: var(--ink);
+                    white-space: pre-wrap; word-break: break-word; }
+
+  .prompt-foot { margin-top: 32px; text-align: center; }
+  .backlink { display: block; text-align: center; margin-top: 40px; font-size: 14px; }
+  .backlink a { color: var(--blue); }
+  @media (max-width: 600px) {
+    .prompt-wrap { padding: 32px 14px 56px; }
+    .prompt-head h1 { font-size: 21px; }
+    .prompt-box { padding: 16px; }
+    .prompt-box pre { font-size: 12.5px; }
+    .btn-copy { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="brand">
+      <img class="logo-img" src="assets/logo-horizontal.png" alt="新譚舎 SHINTANSHA">
+    </a>
+  </div>
+</header>
+
+<div class="prompt-wrap">
+  <div class="prompt-head">
+    <span class="cat">PROMPT</span>
+    <h1>人生を一枚の絵にするプロンプト</h1>
+    <p class="note">AIとのこれまでの会話や保存情報から、その人の「生き方」を一枚の現代日本画に変換するプロンプトです。下のボタンで全文をコピーして、お使いのAIにそのまま貼り付けてください。</p>
+  </div>
+
+  <div class="copybar">
+    <button type="button" class="btn-copy" id="copyBtn">プロンプト全文をコピー</button>
+    <span class="copy-msg" id="copyMsg"></span>
+  </div>
+
+  <div class="prompt-box">
+<pre id="promptText">あなたは世界最高峰の現代日本画家、アートディレクター、ブランドストーリーテラー、エディトリアルデザイナーです。
+
+あなたの仕事は、その人の外見を描くことではありません。
+
+このAIを使っている人について、利用可能な範囲で過去の会話、メモリー、保存情報、相談内容、選択、葛藤、価値観、仕事、人生観、夢、失敗、挑戦、人との関わり方などを読み取り、その人物の**「生き方」そのもの**を、一枚の作品へ変換してください。
+
+ただし、ここで重要なのは、プロフィール要約を絵にすることではありません。
+
+何度も繰り返し現れている選択・言葉・感情・行動パターンから、その人らしさを抽出し、それを象徴・構図・余白・色・モチーフ・文字へ変換してください。
+
+情報が少ない場合は無理に作り込まず、読み取れる範囲のみを反映してください。
+
+情報が十分にある場合でも、説明的にしすぎず、一枚の作品としての深さと余韻を優先してください。
+
+ただし、すぐに作品制作を始めてはいけません。
+
+STEP 1｜最初に、参考写真の有無だけを確認する
+
+最初の返答では、作品の説明や構図提案をせず、次の趣旨だけをユーザーに尋ねてください。
+
+「人物の雰囲気を本人に少し似せますか？
+似せたい場合は、参考写真をアップしてください。
+写真なしで、その人の生き方や会話履歴から人物像を描くこともできます。」
+
+ここで一度、ユーザーの返答を待ってください。
+
+写真がアップされた場合
+
+写真をそのまま再現してはいけません。
+
+* 髪型
+* 顔の輪郭
+* 眼鏡
+* 年齢感
+* 体格
+* 表情の傾向
+* 本人らしい空気感
+* 姿勢や佇まい
+
+などを抽出し、
+本人を知る第三者が見れば「たしかにこの人だ」と分かる程度
+に留めてください。
+
+ただし、
+
+* 写真のコピー
+* リアルな肖像画
+* そっくり再現
+* 過度な美化
+* 写真そのままの服装の再現
+
+は避けてください。
+
+目安としては、
+本人らしさ 65〜75％ × 作品としての再構成 25〜35％
+の感覚でよいです。
+
+写真を使わない場合
+
+顔や身体的特徴を勝手に細かく作り込まず、
+
+* 視線
+* 姿勢
+* 身体の向き
+* 歩みの途中の感じ
+* 周囲との関係
+* 立ち方
+* たたずまい
+
+によって、その人物らしさを表現してください。
+
+また、人物の性別は、会話や保存情報から確認できる場合のみ反映し、確認できない場合は性別を固定的に想定しないでください。
+
+STEP 2｜その人の「反復される生き方」を読む
+
+制作前に、内部で人物理解を行ってください。
+
+単なる経歴や肩書きではなく、
+
+* 何度も語っていること
+* 何度も選んでいること
+* 何を面白いと感じているか
+* 何をつまらないと感じているか
+* どこで葛藤しているか
+* 何に腹が立つか
+* どういう場に幸福を感じるか
+* 人とどう関わるか
+* 仕事で自然に果たしている役割
+* 何を手放せないか
+* 何を本当は目指しているか
+* まだ言葉になり切っていない願い
+
+を読み取ってください。
+
+とくに重要なのは、
+本人が自分を説明するときのきれいな言葉よりも、
+会話の中で何度も現れる行動・選択・感情です。
+
+そこから、その人物に固有のテーマを3〜5個程度抽出してください。
+
+ただし、それをそのまま箇条書きにしてはいけません。
+
+作品コンセプト
+
+作品は、
+「現代日本画 × 人生の寓意画 × 現代エディトリアルデザイン」
+として制作してください。
+
+一見すると静かで美しい。
+しかし、見れば見るほど、その人の人生、仕事、葛藤、願い、未来が、画面の各所ににじんで見えてくる。
+
+そんな**「読むことのできる絵」**にしてください。
+
+プロフィール紹介でも、自己啓発ポスターでも、広告でもありません。
+一人の人間について描かれた、現代の寓意画です。
+
+絶対に避けること
+
+以下は明確に避けてください。
+
+* リアルな肖像画
+* 広告ビジュアル
+* 3DCG
+* アニメポスター
+* 自己啓発ポスター
+* SNSでよくある“それっぽい感動作”
+* 過去作の焼き直し
+* 以前の生成例に似た構図や語彙
+* プロフィール図解
+* 職種の説明画像
+* 「大切にしていること」
+* 「今取り組んでいること」
+* 「現在の活動」
+* 「自分の価値観」
+* 「MISSION」
+* 「VISION」
+* 「未来の仕事」
+* 「キャッチコピーだけが大きい構成」
+
+また、
+
+* 人材育成
+* 組織開発
+* AI活用
+* コンサルティング
+* 研修
+* 講師
+
+などを、そのまま説明項目として並べることも避けてください。
+
+必要なら、それらをさらに一段抽象化し、
+問い・関係・場・試行・変化・まなざし・手触りとして変換してください。
+
+人物表現
+
+人物は重要な存在ですが、巨大な顔の肖像にはしないでください。
+ただし、小さすぎる人物にもしてはいけません。
+
+以下の条件で描いてください。
+
+* 人物は画面全体の中で中程度以上の存在感
+* 顔が見える向き
+* 上半身〜全身
+* 人物の高さは画面高の45〜70％程度を目安
+* 表情は誇張しない
+* 似顔絵にしすぎない
+* でも、本人を知る人が見れば「少し本人らしい」と感じられる
+* 静かな意志
+* 思索
+* 対話性
+* まだ歩みの途中にいる感じ
+
+たとえば、
+
+* 誰かと向き合う前の静けさ
+* 道の途中で立ち止まり考える
+* 一歩踏み出そうとしている
+* 遠くを見ながらも地に足がついている
+* 人や未来へ視線を向けている
+
+など、その人に合う自然な姿にしてください。
+
+衣服
+
+人物は、現代に自然に存在できる和装を基本にしてください。
+
+重要なのは「和風の服を着せること」ではなく、
+その人の佇まい、生き方、静けさ、知性が、和服の線と布の重なりによって表現されることです。
+
+男性・女性のどちらを描く場合でも違和感が出ないよう、性別によって画一的な型へ当てはめず、本人の雰囲気と作品世界から衣服を設計してください。
+
+基本となる方向性は、
+
+* 着物を基調とした一続きの縦のシルエット
+* 長めの羽織や上衣
+* 帯や重なりによって生まれる静かな構造
+* 柔らかく落ちる布
+* 袖や裾の余白
+* 無地またはごく控えめな織り・染め
+* 現代的に簡略化された和装
+
+です。
+
+特に、脚の輪郭がズボンのようにはっきり分かれる服装は避けてください。
+上下が分離したパンツスタイル、作務衣、甚平、スラックス、ワイドパンツのような見え方にはしないでください。
+
+全身の場合も、下半身は、
+着物の裾や長い布が縦に流れ、脚そのものの形を強調しないシルエット
+を基本にしてください。
+
+女性の場合も、
+
+* 過度に華美な振袖
+* 花柄中心の着物
+* 舞妓・芸妓的表現
+* 艶やかさや女性性を過剰に強調した和装
+
+にはしないでください。
+
+男性の場合も、
+
+* 武士
+* 浪人
+* 僧侶
+* 時代劇
+* 剣豪
+
+を連想させる衣装にはしないでください。
+
+男女ともに、
+「現代の知的な人物が、ごく自然に和服をまとっている」
+という印象を優先してください。
+
+写真がある場合でも、写真の服装は参考にせず、
+顔や体格の本人らしさだけを残し、衣服は作品世界に合わせて新しく設計してください。
+
+衣服の色・布の厚み・重なり・袖の長さ・帯の見せ方は、その人物から読み取れる
+
+* 静けさ
+* 強さ
+* 柔らかさ
+* 遊び心
+* 知性
+* 未完成さ
+* 他者との距離感
+
+などに合わせて変えてください。
+
+和服を装飾として使うのではなく、
+人物の生き方を支える「線」と「面」として扱ってください。
+
+寓意モチーフ
+
+その人物の会話や履歴から、その人だけの象徴を5〜10個程度設計してください。
+
+ただし、モチーフは「意味のラベル」として散らさず、
+一つの風景、一つの世界、一つの画面体験として有機的につなげてください。
+
+安直な図像化ではなく、一段深い寓意にしてください。
+
+たとえば、
+
+* 交わる水脈
+* 描きかけの地図
+* 残された余白
+* 途中で向きを変える線
+* 誰かが座っていた痕跡
+* まだ閉じきらない輪郭
+* 足元から広がる波紋
+* 光ではなく、光の受け渡し
+* 言葉の前にある気配
+* 整いすぎない場の息づかい
+
+のように、直接的すぎないが意味を感じる変換をしてください。
+
+以下のような使い古された寓意は、その人物に必然性がない限り避けてください。
+
+* 階段
+* 一本道
+* 山頂
+* 扉
+* 鍵
+* 電球
+* 羅針盤
+* ジグソーパズル
+* 歯車
+* 上昇矢印
+* 握手
+
+日本画としての表現
+
+素材感を非常に重視してください。
+完全に滑らかなデジタルイラストにはしないでください。
+
+積極的に使ってください。
+
+* 和紙の繊維
+* 岩絵具
+* 胡粉
+* 墨
+* にじみ
+* かすれ
+* 金泥
+* 銀泥
+* 箔
+* 顔料の粒子
+* 手描きの線
+* 薄い色層の重なり
+* 乾いた筆跡
+* 微細なひび
+* 塗り残し
+* 余白
+
+密描だけで埋めず、描かれていない部分に意味が宿る日本画的余白を大切にしてください。
+
+余白は画面の20〜35％程度を目安にしてよいですが、
+人物や世界が希薄に見えるほど広くしないでください。
+
+余白は、
+
+* まだ言葉になっていないもの
+* 未来
+* 可能性
+* 未踏の道
+* 余韻
+
+を象徴します。
+
+色彩
+
+色は毎回、その人物から新しく設計してください。
+固定パレットや定番色の繰り返しは禁止です。
+
+会話から読み取れる
+
+* 温度感
+* 知性
+* 遊び心
+* 静けさ
+* 熱量
+* 誠実さ
+* 葛藤
+* 希望
+* しなやかさ
+* 意志の強さ
+
+を色へ変換してください。
+
+日本画らしい色として、
+
+* 藍
+* 墨
+* 群青
+* 白群
+* 緑青
+* 朱
+* 臙脂
+* 山吹
+* 金
+* 銀
+* 生成り
+* 薄鼠
+* 深緑
+
+などを使って構いませんが、
+その人に合わせて主役2〜4色＋補助色に整理してください。
+
+派手さよりも、
+深さ、静けさ、余韻、生命感、知性
+を優先してください。
+
+文字｜6割版
+
+この作品では、文字も重要な絵画要素です。
+ただし、文字は説明パネルではありません。
+
+前回案より文字量を減らし、
+画像内の文字量は前回の約6割程度にしてください。
+
+目安としては、
+少なすぎず、説明的すぎず、見る人が少し読み込める程度。
+情報量はあるが、文字が主張しすぎず、絵の呼吸を邪魔しない状態を目指してください。
+
+1. 人生を象徴する主題文
+
+* 1本
+* 15〜28文字程度
+* 作品の中で最も大きく
+* 人生や仕事を象徴する一文
+* 本人の言葉に近いものを優先
+* 少し余白のある文にする
+* スローガン調、広告コピー調にはしない
+
+2. 価値観・思考のキーワード
+
+* 4〜7語程度
+* 単語または短い語句
+* 小〜中サイズで配置
+* 本当に会話から読めるものだけを選ぶ
+* 一般論の単語を機械的に並べない
+
+3. 人生の断章
+
+* 2〜4本程度
+* 各10〜24文字程度
+* 説明ではなく余韻のある短文
+* その人らしさがにじむもの
+* 職業説明になりすぎないこと
+
+4. 関心領域や役割をにじませる語
+
+* 2〜4個程度
+* 単なる肩書きや業務項目ではなく、少し抽象化した語にする
+* 「現在の活動」などの見出しはつけない
+* ラベルではなく気配として置く
+
+5. 最後の一語
+
+* 作品のどこかに、小さな手書き文字で
+* 英単語を一語だけ入れてよい
+* その下に、日本語で30文字以内の短い一文を添えてよい
+* ただし必須ではない
+* しっくり来なければ、英単語自体を入れない
+
+タイポグラフィ
+
+文字は情報を貼るのではなく、構図の一部として扱ってください。
+
+* 縦書き
+* 横書き
+* 小さな活字
+* 墨文字
+* 金文字
+* 手書き文字
+* かすれた文字
+* 紙片に残された文字
+
+などを必要に応じて使い分けてください。
+
+文字サイズには明確な階層をつけてください。
+
+* 主題文は強く
+* キーワードは中程度
+* 断章は静かに
+* 最後の一語は署名のように
+
+読む順番まで設計された画面にしてください。
+
+構図
+
+作品は縦長を基本としてください。
+ただし、毎回構図は変えてください。
+
+前の生成作品と似た、
+
+* 中央に人物＋左右に文字
+* 背景に道や山
+* 下部に説明文
+* 余白の場所
+* 縦書き主題文の位置
+
+などのテンプレート化は避けてください。
+
+以下のような方向性を参考にしつつ、毎回最適化してください。
+
+* 人物を中景に置き、背景に人生の風景を重ねる
+* 人物の周囲に時間の層がにじむ
+* 一つの風景の中に複数の局面が潜む
+* 上部に未来、下部に現在、周辺に他者との関係を置く
+* 余白を残しつつ、人物と世界の関係が希薄にならない構図
+* エディトリアルデザインの洗練を保ちつつ、絵画として成立する構図
+
+人物は十分に大きく、顔が分かり、存在感があること。
+
+最重要ルール
+
+* すべての要素に理由を持たせること
+* 装飾だけのモチーフを入れないこと
+* 本人らしくない語彙を勝手に差し込まないこと
+* 現在の仕事をそのまま説明しないこと
+* 抽象に逃げすぎないこと
+* かといって説明しすぎないこと
+* 文字量は前回より抑え、約6割程度にすること
+* その人らしさは高く、作品の具体内容は毎回別物にすること
+
+完成作品は、本人が見たときに
+「プロフィールを図解された」ではなく、
+「自分でも気づいていなかった自分の生き方を、一枚にされた」
+と感じるものでなければなりません。
+
+第三者が見たときには、
+「この人は、どんな人生を歩いてきたのだろう」
+と、その人物に興味を持つ作品にしてください。</pre>
+  </div>
+
+  <div class="prompt-foot">
+    <button type="button" class="btn-copy" id="copyBtn2">プロンプト全文をコピー</button>
+  </div>
+
+  <p class="backlink"><a href="/">新譚舎トップへ</a></p>
+</div>
+
+<script>
+(function () {
+  var src = document.getElementById('promptText');
+  var msg = document.getElementById('copyMsg');
+
+  function flash(btn) {
+    var original = btn.textContent;
+    btn.textContent = 'コピーしました';
+    btn.classList.add('done');
+    if (msg) { msg.textContent = 'AIの入力欄に貼り付けてください'; }
+    setTimeout(function () {
+      btn.textContent = original;
+      btn.classList.remove('done');
+      if (msg) { msg.textContent = ''; }
+    }, 2200);
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '-1000px';
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, ta.value.length);
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  // 自動コピーが両方失敗したとき（ブラウザ設定でクリップボードが禁止されている等）は、
+  // 本文を全選択しておき、あとは Command+C / Ctrl+C を押すだけにする
+  function selectAll() {
+    try {
+      var range = document.createRange();
+      range.selectNodeContents(src);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      src.scrollIntoView({ block: 'start' });
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function failed() {
+    var key = /Mac|iPhone|iPad/.test(navigator.platform || '') ? 'Command + C' : 'Ctrl + C';
+    if (msg) {
+      msg.textContent = selectAll()
+        ? '本文を選択しました。' + key + ' を押してコピーしてください'
+        : 'コピーできませんでした。本文を選択してコピーしてください';
+    }
+  }
+
+  function copy(btn) {
+    var text = src.textContent;
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(function () {
+        flash(btn);
+      }, function () {
+        if (fallbackCopy(text)) { flash(btn); } else { failed(); }
+      });
+    } else if (fallbackCopy(text)) {
+      flash(btn);
+    } else {
+      failed();
+    }
+  }
+
+  ['copyBtn', 'copyBtn2'].forEach(function (id) {
+    var b = document.getElementById(id);
+    if (b) { b.addEventListener('click', function () { copy(b); }); }
+  });
+})();
+</script>
+
+<footer class="site-footer">
+  <div class="copyright">© SHINTANSHA Inc. All Rights Reserved.</div>
+</footer>
+</body>
+</html>
