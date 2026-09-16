@@ -6,10 +6,13 @@
    ============================================ */
 
 :root {
-  --blue: #2F5186;          /* 正式ブランド紺（ロゴ同色・印刷C80 M55 Y0 K50） */
+  --blue: #2F5186;          /* 正式ブランド紺（ロゴ同色・印刷C75 M50 Y0 K40） */
   --blue-deep: #1C3254;     /* 見出し・フッター・グラデ終点（濃紺） */
   --blue-light: #7088AC;    /* 淡アクセント（◆印・▾・枠線。スライド鈍青と統一） */
   --blue-pale: #EEF1F5;     /* 淡背景・hover（スライドのカード淡と統一） */
+  --turquoise: #009FA8;     /* 講師向け（BtoC）の色（C100 M0 Y40 K0・2026-09-16 正式値） */
+  --turquoise-ink: #00595E; /* 白地に載せる文字用（対白8.11:1） */
+  --turquoise-pale: #E3F3F4;
   --ink: #26313f;
   --ink-soft: #5c6b80;
   --paper: #ffffff;
@@ -404,3 +407,11 @@ a { color: var(--blue); text-decoration: none; }
 .case-tag { display:inline-block; background:var(--blue-deep); color:#fff; font-size:.72rem; letter-spacing:.08em; padding:3px 12px; border-radius:99px; margin-bottom:10px; }
 .two-col { columns:2; column-gap:36px; }
 @media (max-width:640px){ .two-col { columns:1; } }
+
+/* ---------- 企業向け ⇄ 講師向けの切替ボタン（お問い合わせの左隣・2026-09-16） ----------
+   ボタンの色は「行き先」のブランド色。企業向けサイトでは講師向けのターコイズで出す */
+.nav-switch a {
+  border: 1px solid var(--turquoise); color: var(--turquoise-ink);
+  padding: 8px 14px; border-radius: 4px; font-weight: 600;
+}
+.nav-switch a:hover { background: var(--turquoise-pale); color: var(--turquoise-ink); }

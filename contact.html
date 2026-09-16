@@ -21,7 +21,7 @@
 <link rel="icon" href="assets/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<link rel="stylesheet" href="css/style.css?v=14">
+<link rel="stylesheet" href="css/style.css?v=15">
 <link rel="canonical" href="https://www.shintansha.jp/contact.html">
 </head>
 <body>
@@ -47,6 +47,7 @@
         <li><a href="jisseki.html">実績・事例</a></li>
         <li><a href="note.html">note</a></li>
         <li><a href="company.html">会社概要</a></li>
+        <li class="nav-switch"><a href="b2c/">講師向け支援</a></li>
         <li class="nav-cta"><a href="contact.html">お問い合わせ</a></li>
       </ul>
     </nav>
@@ -67,7 +68,7 @@
 <h2>お問い合わせフォーム</h2>
 <form class="contact-form" id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLSf11f1UMZhnipwa_FrKhufwnEK2fGGHQgv77tGIy8MFBDWP3A/formResponse" method="POST" target="gform_iframe">
   <div class="field">
-    <label>会社名・団体名</label>
+    <label id="company-label">会社名・団体名</label>
     <input type="text" name="entry.1498479307" placeholder="株式会社○○">
   </div>
   <div class="field">
@@ -82,12 +83,14 @@
   <input type="hidden" name="pageHistory" value="0">
   <div class="field">
     <label>ご相談の種別</label>
-    <select name="entry.1858279372">
+    <select name="entry.1858279372" required>
+      <option value="" disabled selected>選択してください</option>
       <option>離職予防・風土改革について（辞めない職場をつくる）</option>
       <option>研修・講演について（管理職・階層別・OJTなど）</option>
       <option>次世代リーダー育成について（幹部候補の育成）</option>
       <option>人が育つ仕組みの設計について（等級・評価と育成の接続）</option>
       <option>AI活用・業務効率化について</option>
+      <option>講師向け支援について</option>
       <option>その他</option>
     </select>
   </div>
@@ -96,20 +99,28 @@
     <textarea name="entry.1893857422" rows="7" required placeholder="現在の状況やお困りごとを、整理されていない状態のままで構いませんのでお書きください。"></textarea>
   </div>
   <button type="submit" class="btn btn-navy">送信する</button>
-  <p class="form-note">送信いただいた内容は代表に直接届き、2営業日以内にご返信します。研修のご依頼はエージェント経由でも承っていますが、こちらは直接ご依頼・ご相談の窓口です。ご入力いただいた情報は、お問い合わせへの対応のみに利用します（<a href="privacy.html">プライバシーポリシー</a>）。ご相談いただいた後に、無理な営業を行うことはありません。</p>
+  <p class="form-note">送信いただいた内容は代表に直接届き、2営業日以内にご返信します。<span class="corp-only">研修のご依頼はエージェント経由でも承っていますが、こちらは直接ご依頼・ご相談の窓口です。</span>ご入力いただいた情報は、お問い合わせへの対応のみに利用します（<a href="privacy.html">プライバシーポリシー</a>）。ご相談いただいた後に、無理な営業を行うことはありません。</p>
 </form>
 <iframe name="gform_iframe" style="display:none" aria-hidden="true"></iframe>
 <script>
 (function () {
   var form = document.getElementById("gform");
   var sent = false;
+  // 講師向けページ（/b2c/）から来たときは、講師向けの表示に切り替える
+  var trainer = new URLSearchParams(location.search).get("type") === "trainer";
+  if (trainer) {
+    form.querySelector('[name="entry.1858279372"]').value = "講師向け支援について";
+    document.getElementById("company-label").textContent = "活動名・屋号（任意）";
+    form.querySelector('[name="entry.1498479307"]').placeholder = "なければ空欄で構いません";
+    document.querySelectorAll(".corp-only").forEach(function (el) { el.hidden = true; });
+  }
   form.addEventListener("submit", function () {
     var company = form.querySelector('[name="entry.1498479307"]');
     if (!company.value) company.value = "（未記入）";
     sent = true;
   });
   document.querySelector('iframe[name="gform_iframe"]').addEventListener("load", function () {
-    if (sent) window.location.href = "thanks.html";
+    if (sent) window.location.href = trainer ? "thanks.html?type=trainer" : "thanks.html";
   });
 })();
 </script>

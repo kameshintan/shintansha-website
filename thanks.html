@@ -21,7 +21,7 @@
 <link rel="icon" href="assets/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<link rel="stylesheet" href="css/style.css?v=14">
+<link rel="stylesheet" href="css/style.css?v=15">
 <link rel="canonical" href="https://www.shintansha.jp/thanks.html">
 </head>
 <body>
@@ -47,6 +47,7 @@
         <li><a href="jisseki.html">実績・事例</a></li>
         <li><a href="note.html">note</a></li>
         <li><a href="company.html">会社概要</a></li>
+        <li class="nav-switch"><a href="b2c/">講師向け支援</a></li>
         <li class="nav-cta"><a href="contact.html">お問い合わせ</a></li>
       </ul>
     </nav>
@@ -65,7 +66,13 @@
     
 <h2>このあとの流れ</h2>
 <p>いただいた内容を確認のうえ、<strong>2営業日以内</strong>にメールでご返信します。しばらく経っても返信がない場合は、お手数ですが再度お問い合わせフォームよりご連絡ください。</p>
-<p style="margin-top:32px"><a href="index.html" class="btn btn-navy">トップページへ戻る</a></p>
+<p style="margin-top:32px"><a id="back-link" href="index.html" class="btn btn-navy">トップページへ戻る</a></p>
+<script>
+if (new URLSearchParams(location.search).get("type") === "trainer") {
+  var b = document.getElementById("back-link");
+  b.href = "b2c/"; b.textContent = "講師向けページへ戻る";
+}
+</script>
     
   </div>
 </div>

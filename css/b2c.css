@@ -1,0 +1,131 @@
+/* ============================================
+   新譚舎 講師向け（BtoC）ページ専用の上書き
+   BtoC色：Shintansha Turquoise Blue（2026-09-07 本人決定・C案）
+   正式値 #009FA8（C100 M0 Y40 K0・2026-09-16 デザイナー納品）。旧仮色 #009CA6 は目測値
+   派生色は仮パレットの明度・彩度を保ち、色相だけ正式値に合わせて再計算
+   親ブランドの紺（--blue / --blue-deep）はフッターと企業向け案内に残す。
+   読み込み順: style.css → b2c.css（body.b2c にだけ効く）
+   ============================================ */
+
+body.b2c {
+  --accent: #009FA8;        /* ロゴ・ヒーロー帯・ボタン */
+  --accent-deep: #007379;   /* hover・帯のグラデ終点 */
+  --accent-pale: #E3F3F4;   /* 淡背景（問い合わせ枠・nav hover） */
+  --accent-ink: #00595E;    /* 白地の文字色として使う濃色（コントラスト確保） */
+}
+
+body.b2c a { color: var(--accent-ink); }
+
+/* ヘッダー */
+body.b2c .brand .sub {
+  font-size: 0.7rem; letter-spacing: 0.2em; color: var(--accent-ink);
+  border-left: 1px solid var(--line); padding-left: 12px;
+}
+body.b2c .global-nav a:hover { color: var(--accent-ink); background: var(--accent-pale); }
+body.b2c .nav-cta a { background: var(--accent); }
+body.b2c .nav-cta a:hover { background: var(--accent-deep); }
+
+/* ヒーロー：BtoC色のベタ帯＋白い波シンボル */
+body.b2c .page-hero {
+  background: linear-gradient(150deg, var(--accent) 0%, var(--accent) 60%, var(--accent-deep) 100%);
+  padding: 72px 0 64px;
+}
+body.b2c .page-hero::before { opacity: 0.045; }
+body.b2c .page-hero .container {
+  display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: center;
+}
+body.b2c .page-hero .cat { border-color: rgba(255,255,255,0.55); }
+body.b2c .page-hero h1 { font-size: clamp(1.6rem, 3.6vw, 2.2rem); line-height: 1.55; text-wrap: balance; }
+body.b2c .page-hero .sub { margin-top: 14px; font-size: 1rem; font-weight: 700; letter-spacing: 0.04em; }
+body.b2c .page-hero .hero-symbol { width: 200px; height: auto; opacity: 0.95; display: block; }
+@media (max-width: 760px) {
+  body.b2c .page-hero .container { grid-template-columns: 1fr; }
+  body.b2c .page-hero .hero-symbol { width: 120px; order: -1; }
+}
+
+/* リード文（白文字を帯に載せず、帯の下に落とす＝コントラスト対策） */
+body.b2c .lead-block {
+  display: grid; grid-template-columns: 4px 1fr; gap: 20px; margin-bottom: 52px;
+}
+body.b2c .lead-block::before { content: ""; background: var(--accent); border-radius: 2px; }
+body.b2c .lead-block p { max-width: 66ch; }
+
+/* 見出し・リスト・カードのアクセント */
+body.b2c .page-body h2 { border-left-color: var(--accent); }
+body.b2c .page-body ul.plan li::before { color: var(--accent); }
+body.b2c .trust-card { border-top: 3px solid var(--accent); }
+body.b2c .trust-card:hover { border-color: var(--line); border-top-color: var(--accent); box-shadow: none; }
+body.b2c .case-card { border-left-color: var(--accent); }
+body.b2c .case-card h3 {
+  font-family: var(--head); font-weight: 700; font-size: 1.08rem;
+  color: var(--blue-deep); letter-spacing: 0.06em; margin: 0 0 8px;
+}
+body.b2c .case-tag { background: var(--accent-ink); }
+
+/* 進め方（順序が意味を持つので番号つき） */
+body.b2c .steps {
+  list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; counter-reset: s;
+}
+body.b2c .steps li {
+  background: var(--mist); border-radius: 8px; padding: 20px 20px 20px 22px;
+  font-size: 0.9rem; position: relative;
+}
+body.b2c .steps li strong {
+  display: block; font-family: var(--head); color: var(--blue-deep);
+  font-size: 1.02rem; letter-spacing: 0.06em; margin-bottom: 6px;
+}
+body.b2c .steps li::before {
+  counter-increment: s; content: counter(s);
+  position: absolute; top: -12px; left: 16px; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--accent); color: #fff; font-weight: 700; font-size: 0.8rem;
+  display: grid; place-items: center;
+}
+@media (max-width: 760px) { body.b2c .steps { grid-template-columns: 1fr; } }
+
+/* 問い合わせ枠・ボタン */
+body.b2c .bridge { background: var(--accent-pale); border-left-color: var(--accent); }
+body.b2c .bridge .btn-gold { background: var(--accent); color: #fff; }
+body.b2c .bridge .btn-gold:hover { background: var(--accent-deep); opacity: 1; }
+body.b2c .btn:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 3px; }
+
+/* 企業向けへの案内（親ブランドの紺ロゴをここに置く） */
+body.b2c .corp-note {
+  margin-top: 40px; padding: 18px 22px; border: 1px solid var(--line); border-radius: 8px;
+  display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+  font-size: 0.85rem; color: var(--ink-soft);
+}
+body.b2c .corp-note .logo-img { height: 32px; width: auto; flex-shrink: 0; }
+body.b2c .corp-note a { color: var(--blue); text-decoration: underline; }
+
+/* フッターは親ブランドの紺のまま（style.css の既定を使う） */
+
+/* フッター：紺背景の上では白リンクに戻す（上の `body.b2c a` がフッターまで濃色にしてしまうため・2026-09-16） */
+body.b2c .site-footer a { color: rgba(255,255,255,0.8); }
+body.b2c .site-footer a:hover { color: #fff; }
+
+/* 企業向けへ戻る切替ボタン：行き先＝企業向けの瑠璃紺で出す（`body.b2c a` と nav hover に負けないよう body.b2c で指定） */
+body.b2c .nav-switch a { border-color: var(--blue); color: var(--blue); }
+body.b2c .nav-switch a:hover { background: var(--blue-pale); color: var(--blue); }
+
+/* 1100px以下はヘッダーの「FOR TRAINERS」を隠す（切替ボタン追加で1024pxのヘッダーが2段に折り返したため。
+   同じ表記はヒーローにあるので情報は失われない・2026-09-16） */
+@media (max-width: 1100px) {
+  body.b2c .brand .sub { display: none; }
+}
+
+/* 2026-09-16 本人指示: ヒーローの白シンボルは外した → 帯は1カラムに */
+body.b2c .page-hero .container { grid-template-columns: 1fr; }
+
+/* 2026-09-16 本人指示: フッターも講師向けの色に（下だけ紺だと企業サイトに戻ったように見えるため）。
+   白文字が読める濃さ #00595E（対白8.11:1）。企業向けへの案内カードは紺のまま */
+body.b2c .site-footer { background: var(--accent-ink); }
+
+/* ページ途中の相談の入口（2026-09-16）。最後のbridgeより軽く、本文の流れを止めない */
+body.b2c .inline-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+  margin: 28px 0 8px; padding: 18px 22px;
+  background: var(--accent-pale); border-radius: 8px;
+}
+body.b2c .inline-cta p { margin: 0; font-size: 0.92rem; color: var(--ink); max-width: 44em; }
+body.b2c .inline-cta .btn { background: var(--accent); color: #fff; white-space: nowrap; }
+body.b2c .inline-cta .btn:hover { background: var(--accent-deep); opacity: 1; }
