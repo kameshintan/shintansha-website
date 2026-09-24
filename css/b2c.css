@@ -17,10 +17,7 @@ body.b2c {
 body.b2c a { color: var(--accent-ink); }
 
 /* ヘッダー */
-body.b2c .brand .sub {
-  font-size: 0.7rem; letter-spacing: 0.2em; color: var(--accent-ink);
-  border-left: 1px solid var(--line); padding-left: 12px;
-}
+body.b2c .brand .sub { color: var(--accent-ink); }
 body.b2c .global-nav a:hover { color: var(--accent-ink); background: var(--accent-pale); }
 body.b2c .nav-cta a { background: var(--accent); }
 body.b2c .nav-cta a:hover { background: var(--accent-deep); }
@@ -109,10 +106,6 @@ body.b2c .nav-switch a:hover { background: var(--blue-pale); color: var(--blue);
 
 /* 1100px以下はヘッダーの「FOR TRAINERS」を隠す（切替ボタン追加で1024pxのヘッダーが2段に折り返したため。
    同じ表記はヒーローにあるので情報は失われない・2026-09-16） */
-@media (max-width: 1100px) {
-  body.b2c .brand .sub { display: none; }
-}
-
 /* 2026-09-16 本人指示: ヒーローの白シンボルは外した → 帯は1カラムに */
 body.b2c .page-hero .container { grid-template-columns: 1fr; }
 
