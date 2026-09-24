@@ -56,8 +56,8 @@ a { color: var(--blue); text-decoration: none; }
 .brand .logo-img { height: 36px; width: auto; display: block; }
 /* ロゴ横の対象ラベル（企業向け=FOR COMPANIES / 講師向け=FOR TRAINERS・色はb2c.cssで上書き） */
 .brand .sub {
-  font-size: 0.68rem; letter-spacing: 0.1em; color: var(--blue);
-  border-left: 1px solid var(--line); padding-left: 10px; white-space: nowrap;
+  font-size: 0.7rem; letter-spacing: 0.2em; color: var(--blue);
+  border-left: 1px solid var(--line); padding-left: 12px; white-space: nowrap;
 }
 .footer-brand .logo-img { height: 40px; }
 
