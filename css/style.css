@@ -57,18 +57,18 @@ a { color: var(--blue); text-decoration: none; }
 .footer-brand .logo-img { height: 40px; }
 
 .global-nav > ul {
-  display: flex; align-items: center; gap: 4px;
+  display: flex; align-items: center; gap: 2px;
   list-style: none; flex-wrap: wrap;
 }
 .global-nav a {
-  display: block; padding: 8px 12px; font-size: 0.85rem;
+  display: block; padding: 8px 10px; font-size: 0.82rem;
   color: var(--ink); border-radius: 4px;
 }
 .global-nav a:hover { color: var(--blue); background: var(--blue-pale); }
 
 .nav-cta a {
   background: var(--blue); color: #fff !important;
-  padding: 9px 18px; border-radius: 4px; font-weight: 600;
+  padding: 9px 15px; border-radius: 4px; font-weight: 600;
 }
 .nav-cta a:hover { background: var(--blue-deep); }
 
@@ -412,6 +412,14 @@ a { color: var(--blue); text-decoration: none; }
    ボタンの色は「行き先」のブランド色。企業向けサイトでは講師向けのターコイズで出す */
 .nav-switch a {
   border: 1px solid var(--turquoise); color: var(--turquoise-ink);
-  padding: 8px 14px; border-radius: 4px; font-weight: 600;
+  padding: 8px 12px; border-radius: 4px; font-weight: 600;
 }
 .nav-switch a:hover { background: var(--turquoise-pale); color: var(--turquoise-ink); }
+
+/* ヘッダーの段組みを企業向け⇄講師向けで揃える（2026-09-24）。
+   項目数の多い企業向けは画面が狭いと折り返して高さが変わり、ページを行き来したとき
+   ヘッダーがガタついた。1080px未満では note・会社概要 をヘッダーから隠す
+   （どちらもフッターに同じリンクがあるので導線は残る） */
+@media (max-width: 1080px) {
+  .global-nav .nav-optional { display: none; }
+}
