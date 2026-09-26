@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>研修講師診断｜新譚舎</title>
+<meta name="description" content="研修講師の8つの力と、いまいる段がわかる診断です。">
+<link rel="icon" href="../assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="stylesheet" href="../css/style.css?v=20">
+<link rel="stylesheet" href="../css/b2c.css?v=8">
+<style>
+/* 研修講師診断（このページ専用。部品名は sd- で始めてサイトのCSSとぶつけない） */
+.sd-wrap{
+  --ac:#009FA8; --ac-ink:#00595E; --ac-pale:#E3F3F4; --ruri:#2F5186; --shu:#BE523C; --shu-pale:#FBEDE8;
+  --ink:#1B2230; --sub:#586274; --line:#DCE2EB; --card:#FFFFFF; --paper:#F5F8F9; --track:#E7EDEF;
+  --c-ruri:var(--ac); --c-tokiwa:var(--ruri); --c-shu:var(--shu);
+  background:var(--paper); color:var(--ink); padding:28px 16px 56px;
+}
+.sd-in{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:20px;line-height:1.8;font-size:15px}
+.sd-wrap h1,.sd-wrap h2,.sd-wrap h3{margin:0;line-height:1.45;text-wrap:balance;color:var(--ink)}
+.sd-wrap p{margin:0}
+.sd-wrap h2{font-size:19px}
+.sd-label{font-size:12px;letter-spacing:.08em;color:var(--sub);font-weight:700}
+.sd-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px}
+.sd-num{font-variant-numeric:tabular-nums}
+.sd-note{font-size:12.5px;color:var(--sub)}
+.sd-wrap [hidden]{display:none!important}
+.sd-btn{font:inherit;font-weight:700;background:var(--ac);color:#fff;border:0;border-radius:6px;padding:11px 22px;cursor:pointer}
+.sd-btn:disabled{opacity:.45;cursor:not-allowed}
+.sd-btn2{font:inherit;background:transparent;color:var(--ac-ink);border:1px solid var(--line);border-radius:6px;padding:10px 18px;cursor:pointer}
+.sd-btn:focus-visible,.sd-btn2:focus-visible,.sd-opt input:focus-visible+span,.sd-wrap textarea:focus-visible,.sd-wrap input[type=text]:focus-visible,.sd-wrap input[type=email]:focus-visible{outline:2px solid var(--shu);outline-offset:2px}
+.sd-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.sd-err{font-size:13px;color:var(--shu)}
+
+/* intro */
+.sd-hero h1{font-size:26px}
+.sd-hero .sd-lead{margin-top:10px}
+.sd-facts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.sd-facts span{font-size:12.5px;background:var(--ac-pale);color:var(--ac-ink);border-radius:4px;padding:2px 10px}
+
+/* choices */
+.sd-choices{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.sd-opt{display:block;cursor:pointer}
+.sd-opt input{position:absolute;opacity:0;width:1px;height:1px}
+.sd-opt span{display:block;border:1px solid var(--line);border-radius:8px;padding:9px 14px;background:var(--card);font-size:14.5px}
+.sd-opt input:checked+span{border-color:var(--ac);background:var(--ac-pale);color:var(--ac-ink);font-weight:700}
+
+/* question page */
+.sd-prog{display:flex;flex-direction:column;gap:6px}
+.sd-prog .sd-bar{height:6px}
+.sd-q{display:flex;flex-direction:column;gap:6px;padding-block:14px;border-top:1px solid var(--line)}
+.sd-q:first-of-type{border-top:0}
+.sd-q .sd-qt{font-weight:700;font-size:15px}
+.sd-q .sd-qn{color:var(--ac-ink);margin-right:6px}
+.sd-scale{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:6px}
+.sd-scale .sd-opt span{padding:8px 4px;text-align:center;font-size:12px;line-height:1.4;height:100%}
+@media (max-width:520px){.sd-scale{grid-template-columns:1fr}.sd-scale .sd-opt span{text-align:left;padding:8px 12px;font-size:13.5px}}
+
+/* free */
+.sd-wrap textarea,.sd-wrap input[type=text],.sd-wrap input[type=email]{width:100%;box-sizing:border-box;font:inherit;font-size:14px;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--card);color:var(--ink)}
+.sd-wrap textarea{min-height:76px}
+.sd-checks{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+@media (max-width:520px){.sd-checks{grid-template-columns:1fr}}
+.sd-field{display:flex;flex-direction:column;gap:6px}
+
+/* result */
+.sd-stage-title{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sd-stage-title h1{font-size:26px}
+.sd-type{font-size:13px;color:var(--ac-ink);background:var(--ac-pale);border-radius:4px;padding:2px 10px}
+.sd-ladder{display:flex;flex-direction:column-reverse;gap:6px;margin-top:14px}
+.sd-step{display:grid;grid-template-columns:44px 1fr;align-items:center;gap:12px;border-radius:8px;padding:8px 12px;border:1px solid var(--line);color:var(--sub);background:var(--card)}
+.sd-no{font-size:15px;font-weight:700}
+.sd-nm{font-weight:700;color:var(--ink);font-size:14px}
+.sd-ds{font-size:12.5px}
+.sd-step.sd-here{border-color:var(--ac);background:var(--ac-pale)}
+.sd-step.sd-here .sd-no{color:var(--ac-ink)}
+.sd-step.sd-here .sd-nm::after{content:"　← いまここ";color:var(--ac-ink)}
+.sd-step.sd-next{border-style:dashed;border-color:var(--ac)}
+.sd-step.sd-next .sd-nm::after{content:"　次の段";color:var(--ac-ink);font-weight:500;font-size:12px}
+.sd-step:nth-child(2){margin-left:12px}.sd-step:nth-child(3){margin-left:24px}.sd-step:nth-child(4){margin-left:36px}.sd-step:nth-child(5){margin-left:48px}
+@media (max-width:420px){.sd-step:nth-child(n){margin-left:0}}
+.sd-radar{display:grid;justify-items:center;gap:12px}
+.sd-radar svg{width:100%;max-width:400px;height:auto}
+.sd-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--sub);justify-content:center}
+.sd-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.sd-strength{background:var(--ac-pale);border-color:transparent}
+.sd-strength .sd-label,.sd-strength h2{color:var(--ac-ink)}
+.sd-strength h2{margin:4px 0 6px;font-size:20px}
+.sd-ai{font-size:11px;color:var(--sub);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-left:6px;vertical-align:2px;font-weight:400}
+.sd-overall p{margin-top:8px}
+.sd-wait{color:var(--sub);font-size:14px}
+.sd-first{background:var(--shu-pale);border-color:transparent}
+.sd-first .sd-label{color:var(--shu)}
+.sd-first h2{margin:6px 0 8px;font-size:20px}
+.sd-first .sd-why{font-size:13px;color:var(--sub)}
+.sd-axes{display:flex;flex-direction:column;gap:12px}
+.sd-axis{display:flex;flex-direction:column;gap:8px}
+.sd-axis-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.sd-axis-top h3{font-size:16px}
+.sd-grp{font-size:11.5px;color:var(--sub);margin-right:6px;font-weight:500}
+.sd-score{font-size:13px;color:var(--sub)}
+.sd-score b{font-size:18px;color:var(--ink)}
+.sd-bar{height:6px;background:var(--track);border-radius:3px;overflow:hidden}
+.sd-bar span{display:block;height:100%;background:var(--ac);border-radius:3px}
+.sd-steps{display:flex;gap:4px}
+.sd-steps span{flex:1;height:18px;border-radius:3px;font-size:10.5px;display:grid;place-items:center;color:var(--sub);background:var(--track)}
+.sd-steps span.sd-ok{background:var(--ac-pale);color:var(--ac-ink)}
+.sd-steps span.sd-low{background:var(--shu-pale);color:var(--shu);font-weight:700}
+.sd-cm{font-size:14px}
+.sd-nx{font-size:12.5px;color:var(--sub)}
+.sd-nx b{color:var(--ink);font-weight:500}
+.sd-axis.sd-best{border-color:var(--ac)}
+.sd-axis.sd-focus{border-color:var(--shu)}
+.sd-cta{display:flex;flex-direction:column;gap:14px}
+.sd-chk{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.sd-chk input[type=checkbox]{width:20px;height:20px;margin-top:3px;accent-color:var(--ac);flex:none}
+.sd-more{display:flex;flex-direction:column;gap:12px;margin-top:4px}
+.sd-done{font-size:14px;color:var(--ac-ink);font-weight:700}
+.sd-line{border-top:1px solid var(--line);padding-top:14px;font-size:13.5px;color:var(--sub)}
+.sd-line b{color:var(--ink)}
+</style>
+</head>
+<body class="b2c">
+<header class="site-header">
+  <div class="header-inner">
+    <a href="./" class="brand">
+      <img class="logo-img" src="../assets/logo-horizontal-b2c.png" alt="新譚舎 SHINTANSHA">
+      <span class="sub">TRAINERS</span>
+    </a>
+    <nav class="global-nav">
+      <ul>
+        <li><a href="./">講師向け支援</a></li>
+        <li class="nav-cta"><a href="../contact.html?type=trainer">お問い合わせ</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="sd-wrap">
+<div class="sd-in">
+
+  <!-- 1. はじめに -->
+  <section id="s-intro" class="sd-card sd-hero">
+    <p class="sd-label">研修講師診断</p>
+    <h1>いまのあなたは、講師の階段の何段目？</h1>
+    <p class="sd-lead">提案・設計・登壇といった講師の力から、仕事の入り口や収益の形まで、8つの力で今の状態を見ます。結果はこの画面ですぐに見られます。</p>
+    <div class="sd-facts"><span>所要時間 約7分</span><span>32〜40問</span><span>登録なしで結果が見られます</span></div>
+    <div class="sd-row" style="margin-top:18px"><button type="button" class="sd-btn" id="b-start">はじめる</button></div>
+  </section>
+
+  <!-- 2. 振り分け -->
+  <section id="s-days" class="sd-card" hidden>
+    <p class="sd-label">はじめに</p>
+    <h2>直近1年で、講師として登壇した日数は？</h2>
+    <p class="sd-note">社内研修・セミナーでの登壇も含めてください。日数によって、質問の中身が変わります。</p>
+    <div class="sd-choices" role="radiogroup" aria-label="登壇日数">
+      <label class="sd-opt"><input type="radio" name="days" id="d-0" value="0-9"><span>0〜9日</span></label>
+      <label class="sd-opt"><input type="radio" name="days" id="d-1" value="10-29"><span>10〜29日</span></label>
+      <label class="sd-opt"><input type="radio" name="days" id="d-2" value="30+"><span>30日以上</span></label>
+    </div>
+    <div class="sd-row" style="margin-top:16px"><button type="button" class="sd-btn" id="b-days" disabled>次へ</button></div>
+  </section>
+
+  <section id="s-route" class="sd-card" hidden>
+    <p class="sd-label">はじめに</p>
+    <h2>講師業の売上が多いのはどちらですか？</h2>
+    <p class="sd-note">同じくらいの場合は、どちらか近い方を選んでください。</p>
+    <div class="sd-choices" role="radiogroup" aria-label="売上の中心">
+      <label class="sd-opt"><input type="radio" name="route" id="r-a" value="agent"><span>研修会社（エージェント）経由</span></label>
+      <label class="sd-opt"><input type="radio" name="route" id="r-d" value="direct"><span>企業との直接取引</span></label>
+    </div>
+    <div class="sd-row" style="margin-top:16px"><button type="button" class="sd-btn2" id="b-route-back">戻る</button><button type="button" class="sd-btn" id="b-route" disabled>次へ</button></div>
+  </section>
+
+  <!-- 3. 質問（軸ごと） -->
+  <section id="s-q" class="sd-card" hidden>
+    <div class="sd-prog">
+      <p class="sd-label" id="q-prog"></p>
+      <div class="sd-bar"><span id="q-bar" style="width:0%"></span></div>
+    </div>
+    <h2 id="q-title" style="margin-top:14px"></h2>
+    <p class="sd-note" id="q-hint"></p>
+    <div id="q-list"></div>
+    <p class="sd-err" id="q-err" hidden>まだ答えていない質問があります。</p>
+    <div class="sd-row" style="margin-top:8px"><button type="button" class="sd-btn2" id="b-q-back">戻る</button><button type="button" class="sd-btn" id="b-q-next">次へ</button></div>
+  </section>
+
+  <!-- 4. 自由記述 -->
+  <section id="s-free" class="sd-card" hidden>
+    <p class="sd-label">最後に</p>
+    <h2>講師として、いま気になっていることは？</h2>
+    <p class="sd-note">あてはまるものをすべて選んでください。コメントを書くときの参考にします。</p>
+    <div class="sd-checks" id="worries"></div>
+    <div class="sd-field" style="margin-top:14px">
+      <label for="f-note" class="sd-note">選んだことについて、ひとこと（任意）</label>
+      <textarea id="f-note" maxlength="300"></textarea>
+    </div>
+    <div class="sd-field" style="margin-top:14px">
+      <label for="f-year" class="sd-note">1年後、講師としてどうなっていたいですか？（任意）</label>
+      <textarea id="f-year" maxlength="300" placeholder="例：年間の登壇を80日にしたい、管理職研修を任されるようになりたい"></textarea>
+    </div>
+    <p class="sd-note" style="margin-top:14px">回答内容（点数・選んだ項目・書いた文章）は、コメントを作るためにAI（Anthropic社のClaude）に送られ、新譚舎で記録します。お名前や会社名など、個人や会社が分かることは書かないでください。詳しくは<a href="../privacy.html">プライバシーポリシー</a>をご覧ください。</p>
+    <p class="sd-err" id="f-err" hidden>気になっていることを1つ以上選んでください。</p>
+    <div class="sd-row" style="margin-top:12px"><button type="button" class="sd-btn2" id="b-free-back">戻る</button><button type="button" class="sd-btn" id="b-free">結果を見る</button></div>
+  </section>
+
+  <!-- 5. 結果 -->
+  <div id="s-result" hidden style="display:flex;flex-direction:column;gap:20px">
+    <section class="sd-card" aria-labelledby="stage-h">
+      <p class="sd-label">あなたの現在地</p>
+      <div class="sd-stage-title"><h1 id="stage-h"></h1><span class="sd-type" id="type"></span></div>
+      <div class="sd-ladder" id="ladder"></div>
+    </section>
+
+    <section class="sd-card" aria-label="8つの力">
+      <p class="sd-label">8つの力（<span id="max"></span>点満点を100に換算）</p>
+      <div class="sd-radar">
+        <svg id="radar" viewBox="0 0 400 380" role="img" aria-label="8軸のレーダーチャート"></svg>
+        <div class="sd-legend"><span><i style="background:#009FA8"></i>講師力（提案・設計・登壇）</span><span><i style="background:#2F5186"></i>立ち位置・AI</span><span><i style="background:#BE523C"></i>ビジネス（販路・収益）</span></div>
+      </div>
+    </section>
+
+    <section class="sd-card sd-strength">
+      <p class="sd-label">あなたの強み</p>
+      <h2 id="best"></h2>
+      <p id="best-cm" class="sd-wait">コメントを作成しています。</p>
+    </section>
+
+    <section class="sd-card sd-overall">
+      <h2>全体のひとこと<span class="sd-ai">AIコメント</span></h2>
+      <p id="overall" class="sd-wait">コメントを作成しています。20秒ほどお待ちください。</p>
+    </section>
+
+    <section class="sd-card sd-first">
+      <p class="sd-label">まずこの1つ</p>
+      <h2 id="first"></h2>
+      <p class="sd-why" id="first-why"></p>
+      <p class="sd-why" id="first-q" hidden></p>
+    </section>
+
+    <section aria-labelledby="axes-h" style="display:flex;flex-direction:column;gap:12px">
+      <h2 id="axes-h">軸ごとの結果<span class="sd-ai">AIコメント</span></h2>
+      <p class="sd-note">小さな四角は、各軸の質問を下の段から順に並べたものです。赤い段が「次に登る段」です。</p>
+      <div class="sd-axes" id="axes"></div>
+    </section>
+
+    <section class="sd-card sd-cta" aria-labelledby="cta-h">
+      <h2 id="cta-h">この結果について話してみませんか</h2>
+      <p>診断特典として、30分お話しします（無料）。結果を見ながら、次の一段をどう登るかを一緒に考えます。</p>
+      <form id="cta-form" novalidate>
+        <label class="sd-chk" for="want"><input type="checkbox" id="want"><span>この結果について、亀田に直接相談してみたい</span></label>
+        <div id="want-more" class="sd-more" hidden>
+          <div class="sd-field"><label for="c-name" class="sd-note">お名前</label><input type="text" id="c-name" maxlength="60" autocomplete="name"></div>
+          <div class="sd-field"><label for="c-mail" class="sd-note">メールアドレス（日程のご連絡に使います）</label><input type="email" id="c-mail" maxlength="120" autocomplete="email"></div>
+          <div class="sd-field"><label for="c-topic" class="sd-note">無料面談で一番話したいことは？（任意）</label><textarea id="c-topic" maxlength="400" placeholder="例：単価を上げるために、何から手をつければいいか"></textarea></div>
+          <label class="sd-chk" for="c-agree"><input type="checkbox" id="c-agree"><span class="sd-note">お名前とメールアドレスは、無料面談のご連絡にだけ使います。AIには送りません。（<a href="../privacy.html">プライバシーポリシー</a>）</span></label>
+          <p class="sd-err" id="c-err" hidden></p>
+          <div class="sd-row"><button type="submit" class="sd-btn" id="c-send">申し込む</button></div>
+        </div>
+        <p class="sd-done" id="c-done" hidden>受け付けました。日程のご連絡をお送りします。</p>
+      </form>
+      <div class="sd-line"><b>講師業のこと、月に1回くらいLINEで書いています。</b><br>読むだけでも大丈夫です。<span id="line-link">（LINEのリンクは準備中）</span></div>
+    </section>
+
+    <div class="sd-row"><button type="button" class="sd-btn2" id="b-again">最初からやり直す</button></div>
+  </div>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img class="logo-img" src="../assets/logo-horizontal-white.png" alt="新譚舎 SHINTANSHA">
+      <p class="tagline">人と組織に新しい物語を</p>
+      <p class="addr">株式会社新譚舎（しんたんしゃ）</p>
+    </div>
+    <nav class="footer-nav">
+      <ul>
+        <li><a href="./">講師向け支援</a></li>
+        <li><a href="../contact.html?type=trainer">お問い合わせ</a></li>
+        <li><a href="../privacy.html">プライバシーポリシー</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="copyright">&copy; SHINTANSHA Inc. All Rights Reserved.</div>
+</footer>
+
+<script>
+/* ===== 設定 ===== */
+// GASのウェブアプリURL（設置後にここへ貼る）。空のあいだは、コメントなしの確認モードで動く
+const GAS_URL = "";
+// LINE友だち追加URL（開設後に貼る）
+const LINE_URL = "";
+
+/* ===== 設問（正本: output/研修講師診断/2026-09-24_設問案v3.md と 2026-09-26_駆け出し版v3.md。下の段→上の段の順） ===== */
+const SCALE = ["まったく当てはまらない","あまり当てはまらない","ある程度当てはまる","かなり当てはまる","完全に当てはまる"];
+const AX = [
+ {k:"prop",nm:"提案力",grp:"講師力",c:"ruri"},{k:"design",nm:"設計力",grp:"講師力",c:"ruri"},{k:"stage",nm:"登壇力",grp:"講師力",c:"ruri"},
+ {k:"expert",nm:"専門性",grp:"立ち位置",c:"tokiwa"},{k:"brand",nm:"ブランディング",grp:"立ち位置",c:"tokiwa"},{k:"ai",nm:"AI活用力",grp:"関連スキル",c:"tokiwa"},
+ {k:"route",nm:"販路力",grp:"ビジネス",c:"shu"},{k:"money",nm:"収益構造",grp:"ビジネス",c:"shu"}
+];
+const K = "行動", R = "結果";
+const Q = {
+ main: {
+  prop:[["提案書に、先方の困りごとを反映させ、研修のコンテンツに対応させている",K],["ヒアリングで、人事担当者が最初に言わなかった「本当の困りごと」を引き出せている",K],["研修以外のメニュー（事前の診断・研修後のフォローなど）を提案し、実施している",K],["自分で提案書を書いて、案件を定期的に受注している",R],["クライアント・研修会社などから、定期的に提案書作成の依頼がある",R]],
+  design:[["研修のテキスト（スライド・ワークシート）を、自分で一から作っている",K],["受講者が研修後にできるようになることを先に決め、そこから講義とワークを組み立てている",K],["「講義→ワーク→振り返り」のように、受講者が体験から学ぶ流れを自分で組んでいる",K],["研修の中に、受講者の職場での行動が変わる仕組み（行動計画・事後課題・上司との共有など）を盛り込んでいる",K],["自分が作った研修の構成やワークを、先方や研修会社から評価されている",R]],
+  stage:[["具体例を添えるなど、分かりやすく話すための自分なりの型を持っている",K],["受講者の反応や理解度を見て、その場で進め方や時間配分を組み替えている",K],["受講者が研修に乗ってこないとき、立て直す方法を複数持っている",K],["受講者の発表や発言を拾い、受講者全体の学びにつながる返し方をしている",K],["受講者アンケートで、講師への評価が安定して高い",R]],
+  expert:[["専門テーマの実務で成果を出した経験がある（実務・支援問わず）",R],["専門テーマについて、現場経験や失敗談（自分の事例・支援事例）を研修で複数語れる",K],["専門テーマの新しい研究や書籍を、継続的に読んでいる",K],["「他の講師と何が違うのか」と聞かれたら、実例を付けて答えられる",K],["自分の専門分野の案件では、取引先（エージェント・企業）からまず自分に声がかかる",R]],
+  brand:[["HP・講師プロフィールなどで、自分の差別化要因が明確に分かるように書いている",K],["SNS・note・メルマガなどで、専門テーマについて月2回以上発信している",K],["取引先や講師仲間から、「○○の講師」として人に紹介されている",R],["発信をきっかけに、研修・講演などの問い合わせがある",R],["本の出版・TV出演・雑誌への寄稿など、信頼性が高い媒体に露出したことがある",R]],
+  ai:[["研修の設計・ワークづくり・提案書・報告書など、複数の作業でAIを使っている",K],["AIを使うことで、研修1本の準備時間がはっきり短くなった",R],["作業ごとに、明確なAIの使い方（プロンプト・設定・ツールなど）がある",K],["AIに何を任せ、何は自分がやるかを明確にしている",K],["自分の研修のうち、AIに代替される可能性がある部分がどこかを把握している",K]],
+  route_agent:[["研修後の報告書や次の施策の提案で、エージェントの営業を手伝っている",K],["複数のエージェントと、継続して取引している",R],["直近1年で、新しいエージェントと取引を始めた",R],["エージェントから「あなたで」と指名されて依頼が来ている",R],["同じ企業から続けて依頼が来ていて、そのエージェントから別の企業の案件も任されている",R]],
+  route_direct:[["問い合わせから受注までの流れ（面談・提案・見積もり）が決まっている",K],["研修の後に次の施策（別の階層への展開・フォロー研修など）を提案し、受注につなげている",K],["直近1年で、新しい企業と直接取引を始めた",R],["仕事の問い合わせが、発信・紹介・既存の顧客など複数の経路から来ている",R],["研修をした企業から、翌年も続けて依頼が来ている",R]],
+  money:[["半年先まで見ても、収入が大きく落ち込む月がない見通しが立っている",R],["売上が、特定の1社に偏っていない（エージェント・直接取引先を問わず）",R],["登壇以外の収入（コンサル・教材・顧問など）がある",R],["今の講師料（日当）の水準に満足している",R],["無理のない登壇日数で、目標とする収入に届いている",R]]
+ },
+ beginner: {
+  prop:[["研修提案書を書いたことがある",K],["依頼内容をもとに、受講者が仕事で抱えている困りごとを深掘りしている",K],["提案書に、研修の目的・目標と、それを達成するための研修内容とのつながりを書いている",K],["研修提案書が採用されたことがある",R]],
+  design:[["自分で作ったコンテンツで登壇できるテーマがある",K],["受講者が今抱えている問題に合わせて、研修で扱う知識を選んでいる",K],["研修の中に、受講者が職場での行動を決めるワーク（行動計画づくりなど）を入れている",K],["自分が作った研修の中身を、依頼元や受講者から評価されたことがある",R]],
+  stage:[["研修の最後まで、受講者が集中して参加している",R],["受講者の反応を見て、説明を足したり言い換えたりしている",K],["受講者の発表や発言を拾って広げ、研修の内容につなげている",K],["受講者アンケートで、講師への評価が高い",R]],
+  expert:[["前職での経験や実績を、数字や具体的な場面で説明できる",K],["専門にしたいテーマについて、本や研究を継続的に読んでいる",K],["依頼元（実施先の担当者・研修会社）から相談を受けたとき、専門にしたいテーマと結びつけて答えている",K],["専門にしたいテーマの研修で、名指しで声がかかったことがある",R]],
+  brand:[["自身の特徴と強みが明確な講師プロフィールを作っている",K],["SNS・noteなどで、講師としての発信を月2回以上している",K],["知人から「○○の講師」として、人に紹介されたことがある",R],["発信をきっかけに、仕事の相談や問い合わせが来たことがある",R]],
+  ai:[["研修の準備（調べもの・資料づくり）に、生成AIを使っている",K],["AIが出した内容を、そのまま使わずに自分で確かめて直している",K],["AIを使うことで、準備にかかる時間が短くなった",R],["自分の研修のうち、AIに代わりがきく部分がどこかを考えたことがある",K]],
+  route:[["研修会社や企業が講師を選ぶときに何を見ているか（審査・模擬登壇・報告など）を知っている",K],["第一線で活躍している先輩講師に、相談できる関係がある",K],["研修会社への登録や前職の人脈など、講師の仕事が来る入り口を複数持っている",R],["同じ依頼元から、2回目以降の依頼をもらっている",R]],
+  money:[["講師の収入が安定するまで、生活に困らない見通し（貯え・本業など）が立っている",R],["目標とする収入に届くまでの道筋（日当・登壇日数・仕事の入り口の増やし方）を具体的に描いている",K],["講師業の収入が、目標としている金額に近づいてきている",R],["今の講師業の収入（登壇本数×講師料）に満足している",R]]
+ }
+};
+const HINT = {
+ prop:"研修の依頼を受けて、提案するところまでの力です。", design:"研修の中身（テキストやワーク）を作る力です。", stage:"研修の当日、場を動かす力です。",
+ expert:"講師としての専門の深さです。", brand:"専門が外に伝わっているかです。", ai:"生成AIの使い方です。",
+ route:"仕事がどこから、どう入ってくるかです。", money:"入ってきた仕事が、お金としてどういう形になっているかです。"
+};
+const WORRIES = ["単価が上がらない","案件が増えない・波がある","自分の強みが分からない","特定の取引先に頼りすぎている","集客・発信のやり方が分からない","体力的にこのペースが続けられるか不安","相談できる講師仲間がいない","AIに仕事を奪われないか不安","その他"];
+const STAGES = [
+ {n:"①",nm:"準備期",ds:"持ちテーマと強みを固める"},
+ {n:"②",nm:"デビュー期",ds:"研修会社に登録し、登壇を重ねている"},
+ {n:"③",nm:"定着期",ds:"リピートと指名が生まれはじめる"},
+ {n:"④",nm:"自立期",ds:"複数の入り口があり、収入が安定している"},
+ {n:"⑤",nm:"確立期",ds:"指名で選ばれ、受ける仕事を自分で選べる"}
+];
+
+/* ===== 状態 ===== */
+const st = { ver:"", days:"", route:"", idx:0, ans:{}, id:"" };
+const $ = id => document.getElementById(id);
+const SECTIONS = ["s-intro","s-days","s-route","s-q","s-free","s-result"];
+function show(id){ SECTIONS.forEach(s => $(s).hidden = (s !== id)); window.scrollTo({top:0}); }
+function items(k){
+  if (st.ver === "main" && k === "route") return Q.main[st.route === "direct" ? "route_direct" : "route_agent"];
+  return Q[st.ver][k];
+}
+function esc(t){ return String(t).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+/* ===== 振り分け ===== */
+$("b-start").onclick = () => show("s-days");
+document.querySelectorAll('input[name=days]').forEach(r => r.onchange = () => $("b-days").disabled = false);
+document.querySelectorAll('input[name=route]').forEach(r => r.onchange = () => $("b-route").disabled = false);
+$("b-days").onclick = () => {
+  st.days = document.querySelector('input[name=days]:checked').value;
+  const ver = st.days === "30+" ? "main" : "beginner";
+  if (ver !== st.ver) { st.ans = {}; }
+  st.ver = ver; st.idx = 0;
+  if (ver === "main") show("s-route"); else { st.route = ""; renderQ(); show("s-q"); }
+};
+$("b-route-back").onclick = () => show("s-days");
+$("b-route").onclick = () => {
+  const r = document.querySelector('input[name=route]:checked').value;
+  if (r !== st.route) delete st.ans.route;
+  st.route = r; st.idx = 0; renderQ(); show("s-q");
+};
+
+/* ===== 質問 ===== */
+function renderQ(){
+  const a = AX[st.idx], list = items(a.k);
+  const total = AX.length;
+  $("q-prog").textContent = `${st.idx+1} / ${total}　${a.grp}`;
+  $("q-bar").style.width = `${Math.round(st.idx/total*100)}%`;
+  $("q-title").textContent = a.nm;
+  const hasExp = list.some(x => x[0].includes("ことがある"));
+  $("q-hint").textContent = HINT[a.k] + (hasExp ? "「〜したことがある」は、回数が多いほど高くつけてください。" : "");
+  const prev = st.ans[a.k] || [];
+  $("q-list").innerHTML = list.map((x,i) => `
+    <fieldset class="sd-q" style="border:0;margin:0;padding-inline:0">
+      <legend class="sd-qt"><span class="sd-qn">${i+1}</span>${esc(x[0])}</legend>
+      <div class="sd-scale">${SCALE.map((lab,v) => `
+        <label class="sd-opt"><input type="radio" name="q${i}" id="q-${a.k}-${i}-${v+1}" value="${v+1}" ${prev[i]===v+1?"checked":""}><span>${lab}</span></label>`).join("")}
+      </div>
+    </fieldset>`).join("");
+  $("q-err").hidden = true;
+  $("b-q-next").textContent = st.idx === total-1 ? "最後の質問へ" : "次へ";
+}
+function collectQ(){
+  const a = AX[st.idx], n = items(a.k).length, out = [];
+  for (let i=0;i<n;i++){ const c = document.querySelector(`input[name=q${i}]:checked`); if (!c) return null; out.push(Number(c.value)); }
+  st.ans[a.k] = out; return out;
+}
+$("b-q-next").onclick = () => {
+  if (!collectQ()) { $("q-err").hidden = false; return; }
+  if (st.idx < AX.length-1) { st.idx++; renderQ(); window.scrollTo({top:0}); }
+  else { renderFree(); show("s-free"); }
+};
+$("b-q-back").onclick = () => {
+  const a = AX[st.idx], n = items(a.k).length, part = [];
+  for (let i=0;i<n;i++){ const c = document.querySelector(`input[name=q${i}]:checked`); part.push(c ? Number(c.value) : undefined); }
+  st.ans[a.k] = part;
+  if (st.idx > 0) { st.idx--; renderQ(); window.scrollTo({top:0}); }
+  else show(st.ver === "main" ? "s-route" : "s-days");
+};
+
+/* ===== 自由記述 ===== */
+function renderFree(){
+  if ($("worries").children.length) return;
+  $("worries").innerHTML = WORRIES.map((w,i) => `<label class="sd-opt"><input type="checkbox" name="worry" id="w-${i}" value="${w}"><span>${w}</span></label>`).join("");
+}
+$("b-free-back").onclick = () => { st.idx = AX.length-1; renderQ(); show("s-q"); };
+$("b-free").onclick = () => {
+  const ws = [...document.querySelectorAll('input[name=worry]:checked')].map(x => x.value);
+  if (!ws.length) { $("f-err").hidden = false; return; }
+  $("f-err").hidden = true;
+  st.worries = ws; st.note = $("f-note").value.trim(); st.year = $("f-year").value.trim();
+  showResult();
+};
+
+/* ===== 採点（GAS側と同じルール） ===== */
+function pct(s){ return Math.round(s.reduce((a,b)=>a+b,0)/(s.length*5)*100); }
+function firstLow(s){ for (let i=0;i<s.length;i++) if (s[i] <= 2) return i; return -1; }
+function scoreAll(){
+  const P = AX.map(a => { const s = st.ans[a.k]; return {...a, s, p:pct(s), q:items(a.k)}; });
+  const g = k => P.find(x => x.k === k).p;
+  let stage;
+  if (st.ver === "beginner") stage = st.days === "0-9" ? 0 : 1;
+  else if (g("route") >= 80 && g("money") >= 80 && g("expert") >= 80) stage = 4;
+  else if (g("route") >= 60 && g("money") >= 60) stage = 3;
+  else stage = 2;
+  const best = P.reduce((m,x) => x.p > m.p ? x : m, P[0]);
+  const low = P.reduce((m,x) => x.p < m.p ? x : m, P[0]);
+  let li = firstLow(low.s); if (li < 0) li = low.s.indexOf(Math.min(...low.s));
+  return {P, stage, best, low, li};
+}
+function typeLabel(){
+  if (st.ver === "beginner") return "駆け出し";
+  return st.route === "direct" ? "企業との直接取引が中心" : "研修会社経由が中心";
+}
+
+/* ===== 結果 ===== */
+function showResult(){
+  const r = scoreAll(); st.result = r;
+  const s = STAGES[r.stage];
+  $("stage-h").textContent = `${s.n} ${s.nm}です`;
+  $("type").textContent = typeLabel();
+  $("ladder").innerHTML = STAGES.map((x,i) => `<div class="sd-step${i===r.stage?" sd-here":""}${i===r.stage+1?" sd-next":""}"><span class="sd-no">${x.n}</span><span><span class="sd-nm">${x.nm}</span><br><span class="sd-ds">${x.ds}</span></span></div>`).join("");
+  $("max").textContent = r.P[0].s.length * 5;
+  $("best").textContent = r.best.nm;
+  $("first").textContent = r.low.q[r.li][0];
+  $("first-why").textContent = `8つの力のうち一番低かった「${r.low.nm}」の、下から${r.li+1}段目です。ここに乗れると、この軸の上の段が見えてきます。`;
+  $("axes").innerHTML = r.P.map(x => {
+    const fl = firstLow(x.s);
+    const steps = x.s.map((v,i) => `<span class="${i===fl?"sd-low":(v>=3?"sd-ok":"")}" title="${esc(x.q[i][0])}">${i+1}段</span>`).join("");
+    const nx = fl >= 0 ? `次に登る段：<b>${esc(x.q[fl][0])}</b>` : "すべての段に乗れています。";
+    return `<article class="sd-card sd-axis${x===r.best?" sd-best":""}${x===r.low?" sd-focus":""}">
+      <div class="sd-axis-top"><h3><span class="sd-grp">${x.grp}</span>${x.nm}</h3><span class="sd-score sd-num"><b>${x.p}</b> / 100</span></div>
+      <div class="sd-bar"><span style="width:${x.p}%"></span></div>
+      <div class="sd-steps" aria-hidden="true">${steps}</div>
+      <p class="sd-cm sd-wait" id="cm-${x.k}">コメントを作成しています。</p>
+      <p class="sd-nx">${nx}</p></article>`;
+  }).join("");
+  if (LINE_URL) $("line-link").innerHTML = ` <a href="${LINE_URL}" target="_blank" rel="noopener">LINEで友だち追加する</a>`;
+  show("s-result");
+  drawRadar(r.P);
+  requestComments(r);
+}
+
+function drawRadar(P){
+  const svg = $("radar"), cx = 200, cy = 188, R0 = 128, N = P.length;
+  const css = getComputedStyle(document.querySelector(".sd-wrap"));
+  const col = v => css.getPropertyValue(v).trim();
+  const pt = (i,r) => { const a = -Math.PI/2 + i*2*Math.PI/N; return [cx + r*Math.cos(a), cy + r*Math.sin(a)]; };
+  let g = "";
+  [20,40,60,80,100].forEach(v => { g += `<polygon points="${P.map((_,i)=>pt(i,R0*v/100).join(",")).join(" ")}" fill="none" stroke="${col("--line")}" stroke-width="1"/>`; });
+  P.forEach((_,i) => { const [x,y] = pt(i,R0); g += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${col("--line")}" stroke-width="1"/>`; });
+  [50,100].forEach(v => { g += `<text x="${cx+4}" y="${cy-R0*v/100+12}" font-size="10" fill="${col("--sub")}" font-family="sans-serif">${v}</text>`; });
+  g += `<polygon points="${P.map((x,i)=>pt(i,R0*Math.max(x.p,4)/100).join(",")).join(" ")}" fill="${col("--ac")}" fill-opacity=".16" stroke="${col("--ac")}" stroke-width="2"/>`;
+  P.forEach((x,i) => {
+    const [px,py] = pt(i,R0*Math.max(x.p,4)/100);
+    g += `<circle cx="${px}" cy="${py}" r="4.5" fill="${col("--c-"+x.c)}"/>`;
+    const [lx,ly] = pt(i,R0+30);
+    const an = Math.abs(lx-cx) < 8 ? "middle" : (lx > cx ? "start" : "end");
+    const dx = an === "start" ? -6 : (an === "end" ? 6 : 0);
+    g += `<text x="${lx+dx}" y="${ly}" text-anchor="${an}" dominant-baseline="middle" font-size="12.5" fill="${col("--ink")}" font-family="sans-serif">${x.nm}</text>`;
+    g += `<text x="${lx+dx}" y="${ly+15}" text-anchor="${an}" dominant-baseline="middle" font-size="11" fill="${col("--c-"+x.c)}" font-family="sans-serif" font-weight="700">${x.p}</text>`;
+  });
+  svg.innerHTML = g;
+}
+
+/* ===== AIコメント（GAS） ===== */
+function payload(){
+  return {
+    action:"diagnose", ver:st.ver, days:st.days, route:st.route,
+    axes: AX.map(a => ({k:a.k, items: items(a.k).map((x,i) => ({q:x[0], tag:x[1], s:st.ans[a.k][i]}))})),
+    worries: st.worries, note: st.note, year: st.year
+  };
+}
+function fillComments(res){
+  const r = st.result;
+  const set = (id, t) => { const el = $(id); el.textContent = t; el.classList.remove("sd-wait"); };
+  set("overall", res.overall || "");
+  AX.forEach(a => set("cm-"+a.k, (res.axes && res.axes[a.k]) || ""));
+  set("best-cm", (res.axes && res.axes[r.best.k]) || "");
+  if (res.first) { $("first").textContent = res.first; $("first-q").textContent = `質問：「${r.low.q[r.li][0]}」`; $("first-q").hidden = false; }
+}
+function failComments(){
+  const msg = "コメントを作成できませんでした。点数と階段、「まずこの1つ」は上のとおりです。時間をおいて、もう一度お試しください。";
+  const set = (id, t) => { const el = $(id); el.textContent = t; el.classList.remove("sd-wait"); };
+  set("overall", msg); set("best-cm", "");
+  AX.forEach(a => set("cm-"+a.k, ""));
+}
+async function requestComments(){
+  if (!GAS_URL) { // 確認モード
+    const t = "（確認モード：GASが未設定のため、AIコメントは表示されません）";
+    fillComments({overall:t, axes:Object.fromEntries(AX.map(a=>[a.k,t]))}); return;
+  }
+  try {
+    const res = await fetch(GAS_URL, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload())});
+    const j = await res.json();
+    if (!j.ok) throw new Error(j.error || "failed");
+    st.id = j.id || ""; fillComments(j);
+  } catch(e) { failComments(); }
+}
+
+/* ===== 無料面談 ===== */
+$("want").onchange = e => { $("want-more").hidden = !e.target.checked; };
+$("cta-form").onsubmit = async e => {
+  e.preventDefault();
+  const name = $("c-name").value.trim(), mail = $("c-mail").value.trim(), topic = $("c-topic").value.trim();
+  const err = t => { $("c-err").textContent = t; $("c-err").hidden = false; };
+  if (!name) return err("お名前を入力してください。");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) return err("メールアドレスを確認してください。");
+  if (!$("c-agree").checked) return err("お名前とメールアドレスの使い方に同意してください。");
+  $("c-err").hidden = true; $("c-send").disabled = true;
+  if (!GAS_URL) { $("want-more").hidden = true; $("c-done").textContent = "（確認モード：送信はされていません）"; $("c-done").hidden = false; return; }
+  try {
+    const body = {action:"interest", id:st.id, name, mail, topic, stage: STAGES[st.result.stage].nm, type: typeLabel()};
+    const res = await fetch(GAS_URL, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(body)});
+    const j = await res.json();
+    if (!j.ok) throw new Error(j.error || "failed");
+    $("want-more").hidden = true; $("c-done").hidden = false;
+  } catch(e2) {
+    $("c-send").disabled = false;
+    err("送信できませんでした。お手数ですが、お問い合わせフォームからご連絡ください。");
+  }
+};
+$("b-again").onclick = () => { location.reload(); };
+</script>
+</body>
+</html>
