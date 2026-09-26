@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>研修講師診断（結果画面の試作）｜新譚舎</title>
+<link rel="icon" href="../assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="stylesheet" href="../css/style.css?v=20">
+<link rel="stylesheet" href="../css/b2c.css?v=8">
+<style>
+/* 研修講師診断・結果画面の試作（このページ専用。部品名は sd- で始めてサイトのCSSとぶつけない） */
+.sd-wrap{
+  --ac:#009FA8; --ac-ink:#00595E; --ac-pale:#E3F3F4; --ruri:#2F5186; --ruri-pale:#EEF1F5; --shu:#BE523C; --shu-pale:#FBEDE8;
+  --ink:#1B2230; --sub:#586274; --line:#DCE2EB; --card:#FFFFFF; --paper:#F5F8F9; --track:#E7EDEF;
+  --c-ruri:var(--ac); --c-tokiwa:var(--ruri); --c-shu:var(--shu);
+  background:var(--paper); color:var(--ink); padding:28px 16px 56px;
+}
+.sd-in{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:20px;line-height:1.8;font-size:15px}
+.sd-wrap h1,.sd-wrap h2,.sd-wrap h3{margin:0;line-height:1.45;text-wrap:balance;color:var(--ink)}
+.sd-wrap p{margin:0}
+.sd-label{font-size:12px;letter-spacing:.08em;color:var(--sub);font-weight:700}
+.sd-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px}
+.sd-num{font-variant-numeric:tabular-nums}
+.sd-note{font-size:12.5px;color:var(--sub)}
+.sd-head{display:flex;flex-direction:column;gap:10px}
+.sd-proto{display:inline-block;font-size:12px;border:1px solid var(--shu);color:var(--shu);border-radius:999px;padding:1px 12px;align-self:flex-start}
+.sd-switch{display:flex;gap:6px;flex-wrap:wrap}
+.sd-switch button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:5px 14px;cursor:pointer}
+.sd-switch button[aria-pressed="true"]{background:var(--ac);border-color:var(--ac);color:#fff}
+.sd-switch button:focus-visible,.sd-cta button:focus-visible,.sd-cta input:focus-visible{outline:2px solid var(--shu);outline-offset:2px}
+.sd-stage-title{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sd-stage-title h1{font-size:26px}
+.sd-type{font-size:13px;color:var(--ac-ink);background:var(--ac-pale);border-radius:4px;padding:2px 10px}
+.sd-ladder{display:flex;flex-direction:column-reverse;gap:6px;margin-top:14px}
+.sd-step{display:grid;grid-template-columns:44px 1fr;align-items:center;gap:12px;border-radius:8px;padding:8px 12px;border:1px solid var(--line);color:var(--sub);background:var(--card)}
+.sd-no{font-size:15px;font-weight:700}
+.sd-nm{font-weight:700;color:var(--ink);font-size:14px}
+.sd-ds{font-size:12.5px}
+.sd-step.sd-here{border-color:var(--ac);background:var(--ac-pale)}
+.sd-step.sd-here .sd-no{color:var(--ac-ink)}
+.sd-step.sd-here .sd-nm::after{content:"　← いまここ";color:var(--ac-ink)}
+.sd-step.sd-next{border-style:dashed;border-color:var(--ac)}
+.sd-step.sd-next .sd-nm::after{content:"　次の段";color:var(--ac-ink);font-weight:500;font-size:12px}
+.sd-step:nth-child(2){margin-left:12px}.sd-step:nth-child(3){margin-left:24px}.sd-step:nth-child(4){margin-left:36px}.sd-step:nth-child(5){margin-left:48px}
+@media (max-width:420px){.sd-step:nth-child(n){margin-left:0}}
+.sd-radar{display:grid;justify-items:center;gap:12px}
+.sd-radar svg{width:100%;max-width:400px;height:auto}
+.sd-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--sub);justify-content:center}
+.sd-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.sd-strength{background:var(--ac-pale);border-color:transparent}
+.sd-strength .sd-label,.sd-strength h2{color:var(--ac-ink)}
+.sd-strength h2{margin:4px 0 6px;font-size:20px}
+.sd-wrap h2{font-size:19px}
+.sd-ai{font-size:11px;color:var(--sub);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-left:6px;vertical-align:2px;font-weight:400}
+.sd-overall p{margin-top:8px}
+.sd-first{background:var(--shu-pale);border-color:transparent}
+.sd-first .sd-label{color:var(--shu)}
+.sd-first h2{margin:6px 0 8px;font-size:20px}
+.sd-first .sd-why{font-size:13px;color:var(--sub)}
+.sd-axes{display:flex;flex-direction:column;gap:12px}
+.sd-axis{display:flex;flex-direction:column;gap:8px}
+.sd-axis-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.sd-axis-top h3{font-size:16px}
+.sd-grp{font-size:11.5px;color:var(--sub);margin-right:6px;font-weight:500}
+.sd-score{font-size:13px;color:var(--sub)}
+.sd-score b{font-size:18px;color:var(--ink)}
+.sd-bar{height:6px;background:var(--track);border-radius:3px;overflow:hidden}
+.sd-bar span{display:block;height:100%;background:var(--ac);border-radius:3px}
+.sd-steps{display:flex;gap:4px}
+.sd-steps span{flex:1;height:18px;border-radius:3px;font-size:10.5px;display:grid;place-items:center;color:var(--sub);background:var(--track)}
+.sd-steps span.sd-ok{background:var(--ac-pale);color:var(--ac-ink)}
+.sd-steps span.sd-low{background:var(--shu-pale);color:var(--shu);font-weight:700}
+.sd-cm{font-size:14px}
+.sd-nx{font-size:12.5px;color:var(--sub)}
+.sd-nx b{color:var(--ink);font-weight:500}
+.sd-axis.sd-best{border-color:var(--ac)}
+.sd-axis.sd-focus{border-color:var(--shu)}
+.sd-cta{display:flex;flex-direction:column;gap:14px}
+.sd-chk{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.sd-cta input[type=checkbox]{width:20px;height:20px;margin-top:3px;accent-color:var(--ac);flex:none}
+.sd-cta textarea{width:100%;box-sizing:border-box;font:inherit;font-size:14px;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--paper);color:var(--ink);min-height:72px}
+.sd-cta button{font:inherit;font-weight:700;background:var(--ac);color:#fff;border:0;border-radius:6px;padding:10px 18px;cursor:pointer;align-self:flex-start}
+.sd-done{font-size:13px;color:var(--ac-ink)}
+.sd-more{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+.sd-more[hidden]{display:none}
+.sd-line{border-top:1px solid var(--line);padding-top:14px;font-size:13.5px;color:var(--sub)}
+.sd-line b{color:var(--ink)}
+</style>
+</head>
+<body class="b2c">
+<header class="site-header">
+  <div class="header-inner">
+    <a href="./" class="brand">
+      <img class="logo-img" src="../assets/logo-horizontal-b2c.png" alt="新譚舎 SHINTANSHA">
+      <span class="sub">TRAINERS</span>
+    </a>
+    <nav class="global-nav">
+      <ul>
+        <li><a href="./">講師向け支援</a></li>
+        <li class="nav-cta"><a href="../contact.html?type=trainer">お問い合わせ</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="sd-wrap">
+<div class="sd-in">
+  <div class="sd-head">
+    <span class="sd-proto">研修講師診断　結果画面の試作</span>
+    <div class="sd-switch" role="group" aria-label="サンプルの切り替え">
+      <button type="button" id="sw-a" data-k="a" aria-pressed="true">研修会社経由が中心の中堅講師</button>
+      <button type="button" id="sw-b" data-k="b" aria-pressed="false">企業との直接取引が中心の講師</button>
+      <button type="button" id="sw-c" data-k="c" aria-pressed="false">駆け出しの講師</button>
+    </div>
+    <p class="sd-note">テスト用のサンプル結果です。AIのコメント欄は、試作用の見本文です。</p>
+  </div>
+
+  <section class="sd-card" aria-labelledby="stage-h">
+    <p class="sd-label">あなたの現在地</p>
+    <div class="sd-stage-title"><h1 id="stage-h"></h1><span class="sd-type" id="type"></span></div>
+    <div class="sd-ladder" id="ladder"></div>
+  </section>
+
+  <section class="sd-card" aria-label="8つの力">
+    <p class="sd-label">8つの力（<span id="max"></span>点満点を100に換算）</p>
+    <div class="sd-radar">
+      <svg id="radar" viewBox="0 0 400 380" role="img" aria-label="8軸のレーダーチャート"></svg>
+      <div class="sd-legend"><span><i style="background:#009FA8"></i>講師力（提案・設計・登壇）</span><span><i style="background:#2F5186"></i>立ち位置・AI</span><span><i style="background:#BE523C"></i>ビジネス（販路・収益）</span></div>
+    </div>
+  </section>
+
+  <section class="sd-card sd-strength">
+    <p class="sd-label">あなたの強み</p>
+    <h2 id="best"></h2>
+    <p id="best-cm"></p>
+  </section>
+
+  <section class="sd-card sd-overall">
+    <h2>全体のひとこと<span class="sd-ai">AIコメント</span></h2>
+    <p class="sd-note" id="worry"></p>
+    <p id="overall"></p>
+  </section>
+
+  <section class="sd-card sd-first">
+    <p class="sd-label">まずこの1つ</p>
+    <h2 id="first"></h2>
+    <p class="sd-why" id="first-why"></p>
+  </section>
+
+  <section aria-labelledby="axes-h" style="display:flex;flex-direction:column;gap:12px">
+    <h2 id="axes-h">軸ごとの結果<span class="sd-ai">AIコメント</span></h2>
+    <p class="sd-note">小さな四角は、各軸の問いを下の段から順に並べたものです。赤い段が「次に登る段」です。</p>
+    <div class="sd-axes" id="axes"></div>
+  </section>
+
+  <section class="sd-card sd-cta" aria-labelledby="cta-h">
+    <h2 id="cta-h">この結果について話してみませんか</h2>
+    <p>診断特典として、30分お話しします（無料）。結果を見ながら、次の一段をどう登るかを一緒に考えます。</p>
+    <form id="cta-form">
+      <label class="sd-chk" for="want"><input type="checkbox" id="want"><span>この結果について、亀田に直接相談してみたい</span></label>
+      <div id="want-more" class="sd-more" hidden>
+        <label for="topic" class="sd-note">無料面談で一番話したいことは？（任意）</label>
+        <textarea id="topic" placeholder="例：単価を上げるために、何から手をつければいいか"></textarea>
+        <button type="submit" id="send">送る</button>
+        <p class="sd-done" id="done" hidden>受け付けました。試作のため、実際には送信されていません。</p>
+      </div>
+    </form>
+    <div class="sd-line"><b>講師業のこと、月に1回くらいLINEで書いています。</b><br>読むだけでも大丈夫です。（LINEのリンクは準備中）</div>
+  </section>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img class="logo-img" src="../assets/logo-horizontal-white.png" alt="新譚舎 SHINTANSHA">
+      <p class="tagline">人と組織に新しい物語を</p>
+      <p class="addr">株式会社新譚舎（しんたんしゃ）</p>
+    </div>
+    <nav class="footer-nav">
+      <ul>
+        <li><a href="./">講師向け支援</a></li>
+        <li><a href="../contact.html?type=trainer">お問い合わせ</a></li>
+        <li><a href="../privacy.html">プライバシーポリシー</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="copyright">&copy; SHINTANSHA Inc. All Rights Reserved.</div>
+</footer>
+<script>
+const AX=[
+ {k:"prop",nm:"提案力",grp:"講師力",c:"ruri"},{k:"design",nm:"設計力",grp:"講師力",c:"ruri"},{k:"stage",nm:"登壇力",grp:"講師力",c:"ruri"},
+ {k:"expert",nm:"専門性",grp:"立ち位置",c:"tokiwa"},{k:"brand",nm:"ブランディング",grp:"立ち位置",c:"tokiwa"},{k:"ai",nm:"AI活用力",grp:"関連スキル",c:"tokiwa"},
+ {k:"route",nm:"販路力",grp:"ビジネス",c:"shu"},{k:"money",nm:"収益構造",grp:"ビジネス",c:"shu"}
+];
+const STAGES=[
+ {n:"①",nm:"準備期",ds:"持ちテーマと強みを固める"},
+ {n:"②",nm:"デビュー期",ds:"研修会社に登録し、登壇を重ねている"},
+ {n:"③",nm:"定着期",ds:"リピートと指名が生まれはじめる"},
+ {n:"④",nm:"自立期",ds:"複数の入り口があり、収入が安定している"},
+ {n:"⑤",nm:"確立期",ds:"指名で選ばれ、受ける仕事を自分で選べる"}
+];
+// 各軸: s=下の段から順の点（1〜5）, q=各段の問い, cm=AIコメント見本
+const DATA={
+ a:{type:"研修会社経由が中心",stage:2,worry:"あなたが選んだ気がかり：単価が上がらない／特定の取引先に頼りすぎている",
+  overall:"登壇の力は8軸の中で一番高く、場を読んで進め方を変え、乗ってこない受講者を立て直し、発言を拾って全体の学びにつなげるところまで、現場の腕は十分にそろっています。一方で、その腕が外に伝わる形（ブランディング）と、お金の形（収益構造）が追いついていません。プロフィールに差別化要因が書かれておらず、売上は1社に寄っています。単価が上がらないと感じている理由は、腕が足りないからではなく、腕が外から見えていないことにありそうです。まずは今ある強みを言葉にしてプロフィールに載せるところから始めると、紹介や指名が次の仕事につながりやすくなります。",
+  ax:{
+   prop:{s:[2,4,1,2,3],q:["提案書に先方の困りごとを反映させる","本当の困りごとを引き出す","研修以外のメニューを提案し、実施する","自分で書いた提案書で定期的に受注する","提案書作成の依頼が定期的に来る"],cm:"ヒアリングで、人事担当者が最初に言わなかった困りごとを引き出す力はあります。ただ、それを提案書に書き込む段で止まっていて、提案書づくりは研修会社に任せきりになっているかもしれません。引き出した困りごとを、研修のどの部分で解決するのかまで提案書に書けると、研修会社から提案書づくりを頼まれる側に回れます。"},
+   design:{s:[2,4,4,2,3],q:["テキストを自分で一から作る","研修後にできるようになることを先に決める","体験から学ぶ流れを自分で組む","職場での行動が変わる仕組みを入れる","構成やワークを評価される"],cm:"受講者が研修後にできるようになることを先に決め、体験から学ぶ流れを組む考え方はできています。テキストを自分で一から作る段が低く、支給テキストに頼る分だけ、あなたらしさが研修に出にくい状態です。職場での行動が変わる仕組みも弱めなので、まずは支給テキストの最後に、行動計画のワークを1枚足すところから始められます。"},
+   stage:{s:[4,5,4,4,3],q:["分かりやすく話す型を持つ","反応を見て進め方を組み替える","乗ってこないときの立て直し方を複数持つ","発言を拾い、全体の学びにつなげる","アンケートの評価が安定して高い"],cm:"場を読んで進め方を組み替え、乗ってこない受講者を立て直し、発言を拾って全体の学びにつなげる。現場で求められる力が一通りそろっています。アンケートの評価がもう一段伸びれば、この強みを数字でも示せるようになります。評価の中身（どの場面が良かったと書かれているか）を集めておくと、プロフィールにもそのまま使えます。"},
+   expert:{s:[4,4,2,2,2],q:["専門テーマの実務で成果を出す","経験談や失敗談を研修で語る","研究や書籍を継続的に読む","他の講師との違いを実例で答える","まず自分に声がかかる"],cm:"専門テーマの実務経験は豊富で、研修で語れる経験談もそろっています。学び続ける段と、他の講師との違いを言葉にする段で点が下がっていて、経験はあるのに、それが選ばれる理由になりきっていない状態です。「あなたに頼むと何が違うのか」を、実際にあった受講者の変化を1つ添えて言えるようにすると、声がかかる段に近づきます。"},
+   brand:{s:[2,1,3,1,1],q:["プロフィールに差別化要因を書く","専門テーマで月2回以上発信する","「○○の講師」として紹介される","発信から問い合わせが来る","信頼性の高い媒体に出る"],cm:"取引先から紹介はされていますが、プロフィールに差別化要因が書かれていないため、紹介された先で「何の講師か」が伝わりにくく、次の仕事につながりにくい状態です。発信はほとんどしていないので、発信を始めるより先に、まずはプロフィールの冒頭を書き直すのが一番効きます。登壇力の強みが、そのまま差別化要因の材料になります。"},
+   ai:{s:[2,2,1,1,2],q:["複数の作業でAIを使う","準備時間がはっきり短くなる","作業ごとの使い方を決める","任せる範囲を決める","代替される部分を把握する"],cm:"生成AIは調べもの程度の使い方にとどまっていて、準備時間はあまり変わっていません。準備の中で繰り返している作業（事前課題の取りまとめ、ワークの案出しなど）を1つ決めてAIに任せると、時間が減る実感が出やすくなります。減った時間を、テキストを自分で作る作業に回せるのが、この軸を伸ばす一番の利点です。"},
+   route:{s:[3,4,1,3,4],q:["報告書などでエージェントの営業を手伝う","複数のエージェントと継続して取引する","新しいエージェントと取引を始める","「あなたで」と指名される","別の企業の案件も任される"],cm:"複数のエージェントと取引が続いていて、同じ企業から続けて呼ばれ、別の企業の案件も任されています。エージェントからの信頼は厚いと言えます。一方で、この1年は新しいエージェントとの取引が始まっておらず、入り口が固定されています。今の関係を保ったまま、新しい入り口を1つ増やせると、収益構造の揺れも小さくなります。"},
+   money:{s:[2,1,1,2,2],q:["半年先まで収入の見通しが立つ","売上が1社に偏らない","登壇以外の収入がある","講師料の水準に満足する","無理のない日数で目標収入に届く"],cm:"売上が1社に寄っていて、半年先の収入の見通しも立ちにくい状態です。登壇以外の収入もないため、今は回っていても、1社の方針が変わったときに大きく揺れる形になっています。講師料にも満足できていません。販路力で入り口を1つ増やすことと、ブランディングで指名を増やすことが、そのままこの軸の改善につながります。"}
+  }},
+ b:{type:"企業との直接取引が中心",stage:2,worry:"あなたが選んだ気がかり：案件が増えない・波がある／AIに仕事を奪われないか不安",
+  overall:"テキストを自分で一から作り、受講者のゴールから研修を組み立て、提案書を書いて受注するところまで、講師としての中身は高い水準にあります。その一方で、AI活用力が8軸の中で一番低く、準備にかかる時間がそのまま登壇日数の上限になっています。また、既存の顧客が離れたら怖いという不安は、新しい入り口が紹介に頼っていることとつながっています。準備の一部をAIに任せて時間を空け、その時間で紹介以外の入り口を1つ作ると、今の強みを保ったまま、収入の土台を広げられます。",
+  ax:{
+   prop:{s:[4,4,2,5,3],q:["提案書に先方の困りごとを反映させる","本当の困りごとを引き出す","研修以外のメニューを提案し、実施する","自分で書いた提案書で定期的に受注する","提案書作成の依頼が定期的に来る"],cm:"自分で提案書を書いて受注する段まで来ていて、企業から直接選ばれる力の中心になっています。空いているのは、研修以外のメニュー（事前の診断や研修後のフォロー）を提案する段です。研修の前後まで含めて提案できると、1回の研修で終わらず、1社との取引を太く長くできます。既存の顧客が離れる不安を和らげる、一番の近道でもあります。"},
+   design:{s:[5,5,4,2,4],q:["テキストを自分で一から作る","研修後にできるようになることを先に決める","体験から学ぶ流れを自分で組む","職場での行動が変わる仕組みを入れる","構成やワークを評価される"],cm:"教材を一から作り、受講者が研修後にできるようになることから組み立てていて、設計の力はあなたの強みです。職場での行動が変わる仕組みの段だけが低く、研修が終わった後の変化を先方に見せる材料が不足しがちです。行動計画を上司と共有する仕組みを入れると、研修の成果が見えやすくなり、翌年の依頼の後押しにもなります。"},
+   stage:{s:[4,4,3,3,3],q:["分かりやすく話す型を持つ","反応を見て進め方を組み替える","乗ってこないときの立て直し方を複数持つ","発言を拾い、全体の学びにつなげる","アンケートの評価が安定して高い"],cm:"分かりやすく話す型と、反応を見て進め方を変える力はそろっています。乗ってこない受講者を立て直す段と、発言を拾って全体の学びにする段が、もう一段伸ばせるところです。この2つが伸びると、アンケートの評価も上がってきます。一度、誰かに登壇を見てもらい、どの場面で受講者が止まっていたかを聞いてみるのがおすすめです。"},
+   expert:{s:[5,4,3,3,4],q:["専門テーマの実務で成果を出す","経験談や失敗談を研修で語る","研究や書籍を継続的に読む","他の講師との違いを実例で答える","まず自分に声がかかる"],cm:"専門テーマで実務の成果を出してきた経験と、研修で語れる経験談が厚く、専門分野の案件で声がかかる立場にもあります。企業から直接選ばれている土台はここです。他の講師との違いを実例で言う段を磨くと、紹介してくれる人も、あなたを説明しやすくなります。その言葉は、ブランディングの発信にもそのまま使えます。"},
+   brand:{s:[3,3,3,2,1],q:["プロフィールに差別化要因を書く","専門テーマで月2回以上発信する","「○○の講師」として紹介される","発信から問い合わせが来る","信頼性の高い媒体に出る"],cm:"HPやnoteで発信はしていて、紹介もされています。止まっているのは、発信から問い合わせにつながる段です。書いている内容と、読んだ人が「この人に相談したい」と思う入り口がつながっていないのかもしれません。記事の終わりに、どんな相談を受けているかを一言添えるだけでも、問い合わせの入り口になります。"},
+   ai:{s:[2,1,1,1,2],q:["複数の作業でAIを使う","準備時間がはっきり短くなる","作業ごとの使い方を決める","任せる範囲を決める","代替される部分を把握する"],cm:"生成AIはほとんど使っていない状態です。抵抗感があるなら、調べものや提案書の下書きなど、自分で内容を確かめられる作業から始めるのが安全です。研修を一から作っているあなたの場合、準備時間の中でAIに任せられる部分は大きいはずです。空いた時間を新しい入り口づくりに回せると、販路力と収益構造の両方に効いてきます。"},
+   route:{s:[3,2,2,2,4],q:["受注までの流れを決める","研修後に次の施策を提案し受注する","新しい企業と直接取引を始める","複数の経路から問い合わせが来る","翌年も続けて依頼が来る"],cm:"研修をした企業から翌年も続けて依頼が来ていて、既存の顧客との関係はしっかりしています。一方で、新しい企業との取引と、紹介以外の入り口が増えておらず、今は既存の顧客に支えられている形です。受注までの流れは決まっているので、あとは入り口を1つ増やせば、その流れにそのまま乗せられます。"},
+   money:{s:[3,3,4,3,3],q:["半年先まで収入の見通しが立つ","売上が1社に偏らない","登壇以外の収入がある","講師料の水準に満足する","無理のない日数で目標収入に届く"],cm:"登壇以外にコンサルの収入もあり、売上も1社に偏っていないので、収益構造は比較的安定しています。講師料と登壇日数のバランスには、まだ余地があります。今の講師料に十分満足しているとは言えない状態なので、研修の前後のメニューを含めた提案で、1社あたりの取引額を上げていく方向が合っています。"}
+  }},
+ c:{type:"駆け出し（デビュー期）",stage:1,beginner:true,worry:"あなたが選んだ気がかり：案件が増えない・波がある／単価が上がらない",
+  overall:"生成AIの使い方は、駆け出しの段階では抜きん出ていて、準備の時間も短くなっています。受講者を最後まで引きつける登壇の基本もできています。いま伸ばしどころなのは、依頼を受けるときの提案と、目標の収入までの道筋です。提案書を書いた経験がまだなく、日当と日数から目標を逆算したこともない状態なので、今は依頼が来るのを待つ形になっています。案件が増えないという悩みは、最初の依頼を2回目につなげる動き方と、自分から提案できる材料を持つことで変わってきます。",
+  ax:{
+   prop:{s:[1,2,1,1],q:["研修提案書を書く","受講者の困りごとを深掘りする","目的・目標と研修内容のつながりを書く","提案書が採用される"],cm:"研修提案書を書いた経験がまだありません。依頼を受けるときも、研修会社から伝えられた内容をそのまま受けている段階です。まずは、今登壇しているテーマで1本、提案書を書いてみるだけで、この軸の最初の段に乗れます。書いた提案書は、研修会社に「こういう研修もできます」と伝える材料にもなります。"},
+   design:{s:[4,3,2,2],q:["自分のコンテンツで登壇できるテーマを持つ","受講者の問題に合わせて知識を選ぶ","職場での行動を決めるワークを入れる","研修の中身を評価される"],cm:"自分で作ったコンテンツで登壇できるテーマがあり、受講者の問題に合わせて知識を選ぶこともできています。次の段は、受講者が研修の後、職場で何をするかを決めるワークです。最後の15分で行動計画を書いてもらうだけでも、研修の印象は大きく変わり、依頼元からの評価につながります。"},
+   stage:{s:[4,3,2,3],q:["受講者が最後まで集中して参加する","反応を見て言い換える","発言を拾って広げる","アンケートの評価が高い"],cm:"受講者を最後まで引きつけ、反応を見て言い換えることはできています。次は、受講者の発表や発言を拾って広げ、研修の内容につなげる段です。発言をそのまま受け止めるだけでなく、「今の話は、さっきの○○とつながりますね」と一言返すだけで、場の学びが深まります。アンケートの評価も、ここから上がっていきます。"},
+   expert:{s:[4,3,2,1],q:["前職の経験を具体的に説明する","専門にしたいテーマを学び続ける","相談にテーマを結びつけて答える","そのテーマで名指しされる"],cm:"前職での経験や実績は、数字や場面を添えて十分に語れます。次は、それを「専門にしたいテーマ」として育てていく段です。専門にしたいテーマの本や研究を読み続け、依頼元から相談を受けたときにそのテーマと結びつけて答えられるようになると、そのテーマで名指しされる講師に近づきます。"},
+   brand:{s:[3,5,1,2],q:["特徴と強みが明確なプロフィールを作る","講師として月2回以上発信する","「○○の講師」として紹介される","発信から相談や問い合わせが来る"],cm:"講師としての発信を月2回以上続けられていて、駆け出しとしてはよくできています。一方で、紹介や問い合わせがまだ生まれていません。発信を読んだ人に「何の講師か」が伝わりきっていないのかもしれません。プロフィールの冒頭で、前職の経験と研修テーマを結びつけて書くと、発信がそのまま紹介の材料になります。"},
+   ai:{s:[5,4,4,3],q:["準備に生成AIを使う","AIの出力を確かめて直す","準備時間が短くなる","AIに代わりがきく部分を考える"],cm:"8軸の中で一番高く、あなたの強みです。準備に生成AIを使い、出てきた内容を自分で確かめて直すところまでできていて、準備時間も短くなっています。次の段は、自分の研修のどこがAIに代わられるかを考えることです。そこが分かると、AIに代わられない部分（あなたの経験や場の運び方）に準備の時間を集中できます。"},
+   route:{s:[3,2,4,2],q:["講師を選ぶときに見られる点を知る","第一線の先輩講師に相談できる","仕事の入り口を複数持つ","2回目以降の依頼をもらう"],cm:"研修会社への登録など、仕事の入り口は複数持てています。一方で、第一線で活躍している先輩講師に相談できる関係と、2回目以降の依頼がまだ少ない状態です。2回目の依頼は、登壇後の報告の速さや、依頼元の担当者に次に何ができるかを伝える動きで変わってきます。最初の依頼を大事に育てるのが、次の段への近道です。"},
+   money:{s:[2,1,2,1],q:["生活に困らない見通しを立てる","目標収入までの道筋を描く","目標の金額に近づく","今の収入に満足する"],cm:"目標の収入までの道筋が、まだ描けていない状態です。生活の見通しも立ちにくく、今の収入にも満足できていません。まずは目標の年収を決め、今の日当なら年に何日登壇すれば届くのかを計算してみてください。数字にすると、日数を増やすべきか、単価の高い仕事を増やすべきかが見えてきます。"}
+  }}
+};
+const $=id=>document.getElementById(id);
+function pct(s){const max=s.length*5;return Math.round(s.reduce((a,b)=>a+b,0)/max*100)}
+function firstLow(s){for(let i=0;i<s.length;i++){if(s[i]<=2)return i}return -1}
+
+function render(key){
+  const d=DATA[key];
+  document.querySelectorAll(".sd-switch button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===key?"true":"false"));
+  const st=STAGES[d.stage];
+  $("stage-h").textContent=`${st.n} ${st.nm}です`;
+  $("type").textContent=d.type;
+  $("ladder").innerHTML=STAGES.map((x,i)=>`<div class="sd-step${i===d.stage?" sd-here":""}${i===d.stage+1?" sd-next":""}"><span class="sd-no">${x.n}</span><span><span class="sd-nm">${x.nm}</span><br><span class="sd-ds">${x.ds}</span></span></div>`).join("");
+  const n=d.ax.prop.s.length; $("max").textContent=n*5;
+
+  const P=AX.map(a=>({...a,p:pct(d.ax[a.k].s),d:d.ax[a.k]}));
+  // 強み：最も高い軸（同点は先の軸）
+  const best=P.reduce((m,x)=>x.p>m.p?x:m,P[0]);
+  // まずこの1つ：最も低い軸（同点は先の軸）の、下から見て最初に低い段
+  const low=P.reduce((m,x)=>x.p<m.p?x:m,P[0]);
+  const li=firstLow(low.d.s);
+  $("best").textContent=best.nm;
+  $("best-cm").textContent=best.d.cm;
+  $("worry").textContent=d.worry;
+  $("overall").textContent=d.overall;
+  $("first").textContent=li>=0?low.d.q[li]:low.d.q[0];
+  $("first-why").textContent=`8つの力のうち一番低かった「${low.nm}」の、下から${li+1}段目です。ここに乗れると、この軸の上の段が見えてきます。`;
+
+  $("axes").innerHTML=P.map(x=>{
+    const fl=firstLow(x.d.s);
+    const steps=x.d.s.map((v,i)=>`<span class="${i===fl?"sd-low":(v>=3?"sd-ok":"")}" title="${x.d.q[i]}">${i+1}段</span>`).join("");
+    const nx=fl>=0?`次に登る段：<b>${x.d.q[fl]}</b>`:`すべての段に乗れています。`;
+    return `<article class="sd-card sd-axis${x===best?" sd-best":""}${x===low?" sd-focus":""}">
+      <div class="sd-axis-top"><h3><span class="sd-grp">${x.grp}</span>${x.nm}</h3><span class="sd-score sd-num"><b>${x.p}</b> / 100</span></div>
+      <div class="sd-bar"><span style="width:${x.p}%"></span></div>
+      <div class="sd-steps" aria-hidden="true">${steps}</div>
+      <p class="sd-cm">${x.d.cm}</p>
+      <p class="sd-nx">${nx}</p></article>`;
+  }).join("");
+  drawRadar(P);
+}
+
+function drawRadar(P){
+  const svg=$("radar"),cx=200,cy=188,R=128,N=P.length;
+  const css=getComputedStyle(document.querySelector(".sd-wrap"));
+  const col=v=>css.getPropertyValue(v).trim();
+  const pt=(i,r)=>{const a=-Math.PI/2+i*2*Math.PI/N;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]};
+  let g="";
+  [20,40,60,80,100].forEach(v=>{
+    const pts=P.map((_,i)=>pt(i,R*v/100).join(",")).join(" ");
+    g+=`<polygon points="${pts}" fill="none" stroke="${col("--line")}" stroke-width="1"/>`;
+  });
+  P.forEach((_,i)=>{const[x,y]=pt(i,R);g+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${col("--line")}" stroke-width="1"/>`});
+  [50,100].forEach(v=>{g+=`<text x="${cx+4}" y="${cy-R*v/100+12}" font-size="10" fill="${col("--sub")}" font-family="sans-serif">${v}</text>`});
+  const poly=P.map((x,i)=>pt(i,R*Math.max(x.p,4)/100).join(",")).join(" ");
+  g+=`<polygon points="${poly}" fill="${col("--ac")}" fill-opacity=".16" stroke="${col("--ac")}" stroke-width="2"/>`;
+  P.forEach((x,i)=>{
+    const[px,py]=pt(i,R*Math.max(x.p,4)/100);
+    g+=`<circle cx="${px}" cy="${py}" r="4.5" fill="${col("--c-"+x.c)}"/>`;
+    const[lx,ly]=pt(i,R+30);
+    const anchor=Math.abs(lx-cx)<8?"middle":(lx>cx?"start":"end");
+    const dx=anchor==="start"?-6:(anchor==="end"?6:0);
+    g+=`<text x="${lx+dx}" y="${ly}" text-anchor="${anchor}" dominant-baseline="middle" font-size="12.5" fill="${col("--ink")}" font-family="Noto Sans JP, Hiragino Sans, sans-serif">${x.nm}</text>`;
+    g+=`<text x="${lx+dx}" y="${ly+15}" text-anchor="${anchor}" dominant-baseline="middle" font-size="11" fill="${col("--c-"+x.c)}" font-family="sans-serif" font-weight="700">${x.p}</text>`;
+  });
+  svg.innerHTML=g;
+}
+
+document.querySelectorAll(".sd-switch button").forEach(b=>b.addEventListener("click",()=>render(b.dataset.k)));
+$("want").addEventListener("change",e=>{$("want-more").hidden=!e.target.checked});
+$("cta-form").addEventListener("submit",e=>{e.preventDefault();$("done").hidden=false});
+render("a");
+</script>
+</body>
+</html>
