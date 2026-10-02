@@ -429,3 +429,17 @@ a { color: var(--blue); text-decoration: none; }
   .global-nav .nav-optional { display: none; }
   .brand .sub { display: none; }   /* 両サイト同じ幅で出し入れして段組みを揃える */
 }
+
+/* ---------- AIページ: 痛み→答え→実績 の流し読み部品（2026-09-30） ----------
+   視覚型の読み手が見出しと太字だけで要点を拾えるよう、1項目1行の短文カードにする */
+.pain-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; margin:18px 0 8px; }
+.pain-item { background:var(--mist); border-radius:6px; padding:14px 16px 14px 44px; position:relative; font-size:.93rem; line-height:1.6; }
+.pain-item::before { content:"✓"; position:absolute; left:14px; top:12px; width:20px; height:20px; border:1.5px solid var(--blue-light); border-radius:3px; color:var(--blue); font-size:.8rem; line-height:18px; text-align:center; font-weight:700; }
+.answer { font-family:var(--head); font-weight:700; color:var(--blue-deep); font-size:clamp(1.15rem,2.6vw,1.45rem); line-height:1.6; letter-spacing:.04em; margin:10px 0 14px; }
+.steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin:20px 0 8px; counter-reset:step; }
+.step { background:#fff; border:1px solid var(--line); border-top:3px solid var(--blue); border-radius:6px; padding:18px 18px 16px; }
+.step .no { display:block; font-family:var(--head); font-size:.78rem; letter-spacing:.14em; color:var(--blue-light); font-weight:700; }
+.step h3 { font-size:1rem; color:var(--blue-deep); margin:4px 0 6px; }
+.step p { font-size:.84rem; color:var(--ink-soft); line-height:1.7; }
+.case-card .case-meta { font-size:.8rem; color:var(--ink-soft); margin-bottom:6px; }
+.case-card p { font-size:.9rem; }
