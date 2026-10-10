@@ -667,3 +667,23 @@ a { color: var(--blue); text-decoration: none; }
 .job-flow-note { font-size:.82rem; color:var(--blue-deep); font-weight:700; margin-top:10px; }
 .report-lead { font-size:.88rem; color:var(--ink); margin-bottom:8px; }
 @media (max-width:900px){ .job-flow ol { grid-template-columns:1fr; } .job-flow li:not(:last-child)::after { content:"↓"; right:auto; left:50%; top:auto; bottom:-12px; transform:translateX(-50%); } }
+/* プロフィール: 経験→いまの仕事 の対応図（2026-10-10） */
+.exp-map { display:flex; flex-direction:column; gap:10px; margin:14px 0 28px; }
+.exp-row { display:grid; grid-template-columns:1fr 32px 1.3fr; align-items:stretch; gap:6px; }
+.exp-from, .exp-to { border-radius:8px; padding:12px 14px; display:flex; flex-direction:column; gap:2px; }
+.exp-from { background:var(--mist); }
+.exp-to { background:var(--blue-pale); border-left:4px solid var(--blue); }
+.exp-from b, .exp-to b { color:var(--blue-deep); font-size:.95rem; }
+.exp-from span, .exp-to span { font-size:.82rem; color:var(--ink-soft); line-height:1.6; }
+.exp-arrow { display:flex; align-items:center; justify-content:center; color:#BE523C; font-weight:700; font-size:1.2rem; }
+@media (max-width:640px){ .exp-row { grid-template-columns:1fr; } .exp-arrow { transform:rotate(90deg); height:20px; } }
+/* プロフィール: 歩みの年表（2026-10-10） */
+.timeline { list-style:none; position:relative; margin:16px 0 26px; padding-left:28px; }
+.timeline::before { content:""; position:absolute; left:9px; top:6px; bottom:6px; width:2px; background:var(--line); }
+.timeline li { position:relative; padding:6px 0 12px; }
+.timeline li::before { content:""; position:absolute; left:-24px; top:11px; width:12px; height:12px; border-radius:50%; background:#fff; border:2px solid var(--blue); }
+.timeline li.tl-low::before { border-color:#BE523C; }
+.timeline li.tl-now::before { background:var(--blue); }
+.timeline b { display:block; color:var(--blue-deep); font-size:.95rem; }
+.timeline li.tl-low b { color:#BE523C; }
+.timeline span { font-size:.84rem; color:var(--ink-soft); line-height:1.6; }
