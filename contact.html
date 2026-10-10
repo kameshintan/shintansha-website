@@ -21,7 +21,7 @@
 <link rel="icon" href="assets/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<link rel="stylesheet" href="css/style.css?v=24">
+<link rel="stylesheet" href="css/style.css?v=25">
 <link rel="canonical" href="https://www.shintansha.jp/contact.html">
 </head>
 <body>
@@ -35,14 +35,14 @@
       <ul>
         <li class="has-dropdown"><a href="index.html#services">サービス</a>
           <ul class="dropdown">
-            <li><a href="service-teichaku.html">離職予防・風土改革</a></li>
-            <li><a href="service-kenshu.html">研修・講演</a></li>
-            <li><a href="service-leader.html">次世代リーダー育成</a></li>
+            <li><a href="service-leader.html">次世代リーダー開発</a></li>
+            <li><a href="service-teichaku.html">組織開発（離職予防・風土改革）</a></li>
             <li><a href="service-jinji.html">人が育つ仕組みの設計</a></li>
             <li><a href="service-ai.html">AI活用・業務効率化</a></li>
           </ul>
         </li>
-        <li><a href="value.html">提供価値</a></li>
+        <li><a href="service-kenshu.html">研修・講演</a></li>
+        <li><a href="value.html">頼む理由</a></li>
         <li><a href="profile.html">代表プロフィール</a></li>
         <li><a href="flow.html">進め方</a></li>
         <li><a href="jisseki.html">実績・事例</a></li>
@@ -65,7 +65,7 @@
 <div class="page-body">
   <div class="container">
     
-<h2>ご相談の流れ</h2><ul class="plan"><li>フォーム送信後、2営業日以内にご返信します</li><li>初回はオンライン面談で、課題の輪郭を一緒に整理します</li><li>この段階での費用は発生しません</li></ul>
+<h2>ご相談の流れ</h2><ul class="plan"><li>フォーム送信後、2営業日以内にご返信します</li><li class="corp-only">初回はオンライン面談（60分・無料）で、課題の輪郭を一緒に整理します</li><li class="trainer-only" hidden>最初のご相談は30分・無料、オンラインです</li><li>この段階での費用は発生しません</li></ul>
 <h2>お問い合わせフォーム</h2>
 <form class="contact-form" id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLSf11f1UMZhnipwa_FrKhufwnEK2fGGHQgv77tGIy8MFBDWP3A/formResponse" method="POST" target="gform_iframe">
   <div class="field">
@@ -88,7 +88,7 @@
       <option value="" disabled selected>選択してください</option>
       <option>離職予防・風土改革について（辞めない職場をつくる）</option>
       <option>研修・講演について（管理職・階層別・OJTなど）</option>
-      <option>次世代リーダー育成について（幹部候補の育成）</option>
+      <option value="次世代リーダー育成について（幹部候補の育成）">次世代リーダー開発について（幹部候補の育成）</option>
       <option>人が育つ仕組みの設計について（等級・評価と育成の接続）</option>
       <option>AI活用・業務効率化について</option>
       <option>講師向け支援について</option>
@@ -114,6 +114,7 @@
     document.getElementById("company-label").textContent = "活動名・屋号（任意）";
     form.querySelector('[name="entry.1498479307"]').placeholder = "なければ空欄で構いません";
     document.querySelectorAll(".corp-only").forEach(function (el) { el.hidden = true; });
+    document.querySelectorAll(".trainer-only").forEach(function (el) { el.hidden = false; });
   }
   form.addEventListener("submit", function () {
     var company = form.querySelector('[name="entry.1498479307"]');
@@ -138,11 +139,11 @@
     </div>
     <nav class="footer-nav">
       <ul>
-        <li><a href="service-teichaku.html">離職予防・風土改革</a></li>
-        <li><a href="service-kenshu.html">研修・講演</a></li>
-        <li><a href="service-leader.html">次世代リーダー育成</a></li>
+        <li><a href="service-leader.html">次世代リーダー開発</a></li>
+        <li><a href="service-teichaku.html">組織開発（離職予防・風土改革）</a></li>
         <li><a href="service-jinji.html">人が育つ仕組みの設計</a></li>
         <li><a href="service-ai.html">AI活用・業務効率化</a></li>
+        <li><a href="service-kenshu.html">研修・講演</a></li>
         <li><a href="note.html">note発信</a></li>
         <li class="nav-optional"><a href="company.html">会社概要</a></li>
         <li><a href="contact.html">お問い合わせ</a></li>
