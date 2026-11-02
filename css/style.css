@@ -927,3 +927,115 @@ a { color: var(--blue); text-decoration: none; }
 .pick-grid-2 { grid-template-columns:repeat(3,1fr); }
 @media (max-width:900px){ .pick-grid-2 { grid-template-columns:1fr 1fr; } }
 @media (max-width:560px){ .pick-grid-2 { grid-template-columns:1fr; } }
+
+/* トップ：雑誌のような落ち着いた見せ方（A案・2026-11-02）。.ed の中だけに効く */
+
+.ed { --ink:#1F2733; --ruri:#2F5186; --ruri-deep:#1C3254; --mute:#5E6878; --rule:#D9DEE7; --tint:#F4F6F9; --shu:#BE523C; background:#fff; color:var(--ink); }
+.ed .ed-wrap { max-width:720px; margin:0 auto; padding:0 20px; }
+.ed h2 { font-family:"Hiragino Mincho ProN","Noto Serif JP",serif; font-weight:600; font-size:clamp(1.45rem,3.2vw,1.9rem); line-height:1.5; color:var(--ruri-deep); letter-spacing:.04em; margin:0 0 18px; border:0; padding:0; }
+.ed h2::before, .ed h2::after { content:none; display:none; }
+.ed h3 { font-family:"Hiragino Mincho ProN","Noto Serif JP",serif; font-weight:600; font-size:1.2rem; color:var(--ruri-deep); margin:0 0 6px; }
+.ed h3 a { color:inherit; text-decoration:none; border-bottom:1px solid var(--rule); }
+.ed h3 a:hover { border-bottom-color:var(--ruri); }
+.ed p { font-size:1rem; line-height:2; margin:0 0 14px; max-width:38em; text-wrap:pretty; line-break:strict; }
+.ed .ed-svc:first-of-type { margin-top:28px; }
+.ed .ed-sec { padding:72px 0; }
+.ed .ed-tint { background:var(--tint); }
+.ed .ed-note, .ed .ed-aside { color:var(--mute); font-size:.92rem; }
+.ed .ed-aside a, .ed .ed-link { color:var(--ruri); text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:1px; }
+.ed .ed-link:hover, .ed .ed-aside a:hover { text-decoration-thickness:2px; }
+
+/* ヒーロー：縦書きの見出しと、栞の朱 */
+.ed .ed-hero { padding:80px 0 72px; border-bottom:1px solid var(--rule); }
+.ed .ed-hero-in { display:grid; grid-template-columns:1fr auto; gap:48px; align-items:start; max-width:880px; }
+.ed .ed-v { writing-mode:vertical-rl; font-family:"Hiragino Mincho ProN","Noto Serif JP",serif; font-weight:600; font-size:clamp(2rem,4.6vw,3.1rem); line-height:1.55; letter-spacing:.14em; color:var(--ruri-deep); margin:0; order:2; position:relative; padding-right:22px; }
+.ed .ed-v span { display:block; }
+.ed .ed-v::before { content:""; position:absolute; right:0; top:-80px; width:5px; height:calc(100% + 152px); background:var(--shu); }
+.ed .ed-hero-text { order:1; padding-top:12px; }
+.ed .ed-kicker { color:var(--mute); font-size:.86rem; letter-spacing:.08em; margin-bottom:26px; }
+.ed .ed-lead { font-size:1.06rem; }
+.ed .ed-actions { display:flex; flex-wrap:wrap; align-items:center; gap:14px 24px; margin-top:28px; }
+.ed .ed-btn { display:inline-block; background:var(--ruri); color:#fff; text-decoration:none; padding:13px 22px; border-radius:2px; font-weight:700; font-size:.95rem; }
+.ed .ed-btn:hover { background:var(--ruri-deep); }
+.ed .ed-btn:focus-visible, .ed a:focus-visible { outline:2px solid var(--shu); outline-offset:3px; }
+
+/* 目次のような入口 */
+.ed .ed-toc { list-style:none; margin:24px 0 18px; padding:0; border-top:1px solid var(--rule); }
+.ed .ed-toc li { border-bottom:1px solid var(--rule); }
+.ed .ed-toc a { display:flex; align-items:baseline; gap:10px; padding:16px 2px; color:var(--ink); text-decoration:none; }
+.ed .ed-toc .q { font-family:"Hiragino Mincho ProN","Noto Serif JP",serif; font-size:1.08rem; line-height:1.7; }
+.ed .ed-toc .dots { flex:1; border-bottom:1px dotted #9AA6B8; transform:translateY(-5px); min-width:24px; }
+.ed .ed-toc .to { color:var(--ruri); font-size:.9rem; font-weight:700; white-space:nowrap; }
+.ed .ed-toc a:hover .q { color:var(--ruri); }
+
+.ed .ed-two { display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-top:22px; }
+.ed .ed-sub { font-weight:700; color:var(--ruri-deep); font-size:.92rem; margin-bottom:4px; }
+.ed .ed-plain { font-size:.96rem; }
+
+.ed .ed-svc { display:grid; grid-template-columns:120px 1fr; gap:24px; align-items:start; padding:26px 0; border-top:1px solid var(--rule); }
+.ed .ed-svc:last-of-type { border-bottom:1px solid var(--rule); margin-bottom:24px; }
+.ed .ed-ill { width:120px; height:auto; }
+
+/* 引用 */
+.ed .ed-quote { margin:8px 0 28px; padding:0; }
+.ed .ed-quote p { font-family:"Hiragino Mincho ProN","Noto Serif JP",serif; font-size:clamp(1.3rem,3vw,1.75rem); line-height:1.75; color:var(--ruri-deep); max-width:none; margin:0 0 8px; }
+.ed .ed-quote p::before { content:"「"; margin-left:-.6em; }
+.ed .ed-quote p::after { content:"」"; }
+.ed .ed-quote cite { font-style:normal; color:var(--mute); font-size:.86rem; }
+.ed .ed-quote-sub { color:var(--mute); font-size:.94rem; }
+
+.ed .ed-rep { display:grid; grid-template-columns:150px 1fr; gap:32px; align-items:start; max-width:760px; }
+.ed .ed-rep img { width:150px; height:190px; object-fit:cover; border-radius:2px; }
+.ed .ed-links { display:flex; flex-wrap:wrap; gap:8px 22px; }
+.ed .ed-end { text-align:left; }
+
+@media (max-width:760px){
+  .ed .ed-sec { padding:56px 0; }
+  .ed .ed-hero { padding:48px 0 52px; }
+  .ed .ed-hero-in { grid-template-columns:1fr; gap:28px; }
+  .ed .ed-v { order:0; justify-self:end; font-size:2.05rem; }
+  .ed .ed-v::before { top:-48px; height:calc(100% + 80px); }
+  .ed .ed-two { grid-template-columns:1fr; gap:14px; }
+  .ed .ed-svc { grid-template-columns:72px 1fr; gap:16px; }
+  .ed .ed-ill { width:72px; }
+  .ed .ed-toc a { flex-wrap:wrap; }
+  .ed .ed-toc .dots { display:none; }
+  .ed .ed-toc .to { width:100%; }
+  .ed .ed-rep { grid-template-columns:1fr; }
+  .ed .ed-rep img { width:120px; height:150px; }
+}
+@media (prefers-reduced-motion: reduce){ .ed * { transition:none !important; } }
+
+/* ===== A化（全ページ・2026-11-02）: トップのA案（雑誌のように落ち着いた）に全体をそろえる =====
+   カードの影・丸み、英語ラベル、チェックボックス、見出し左の太線を外し、罫線と余白で読ませる */
+.page-hero .cat { display:none; }
+.page-body h2 { font-family:"Hiragino Mincho ProN","Noto Serif JP",serif; font-weight:600; font-size:clamp(1.35rem,2.8vw,1.7rem); letter-spacing:.04em; line-height:1.5; padding-left:0; border-left:0; margin:64px 0 18px; }
+body.b2c .page-body h2 { border-left:0; }
+.page-body h2:first-of-type { margin-top:0; }
+.page-body p { text-wrap:pretty; }
+.btn { border-radius:2px; }
+.pg, .pillar, .support, .reason, .qa, .trust-card, .way, .why-item, .ev, .case-card, .stat, .b2c-svc-card { box-shadow:none !important; border-radius:0 !important; }
+.pg, .support, .reason, .trust-card, .way, .why-item, .ev { background:transparent; border:0; border-top:1px solid var(--line); padding:16px 0 14px; }
+body.b2c .b2c-svc-card, body.b2c .ev { background:transparent; border:0; border-top:1px solid var(--line); padding:18px 0 12px; }
+.trust-card:hover { box-shadow:none; border-color:var(--line); }
+body.b2c .trust-card { border-top:1px solid var(--line); }
+.pillar { background:transparent; border:0; border-top:2px solid var(--blue-deep); padding:18px 0 8px; }
+.pillar-wide { background:transparent; border-top-color:var(--blue-deep); }
+.pillar-pain, .pillar-wide .pillar-pain { background:transparent; padding:0; }
+.pillar-no, .pillar-wide .pillar-no { color:var(--ink-soft); letter-spacing:.04em; font-family:inherit; font-weight:700; }
+.case-card { background:transparent; border:0; border-top:2px solid var(--blue-deep); padding:22px 0 8px; margin:28px 0; }
+body.b2c .case-card { border-left:0; }
+.case-tag, body.b2c .case-tag { background:transparent !important; color:var(--ink-soft) !important; padding:0; margin-bottom:4px; font-size:.8rem; letter-spacing:.04em; border-radius:0; }
+.pain-item { background:transparent; border-radius:0; padding:6px 0 6px 18px; border:0; }
+.pain-item::before, .pg .pain-item::before { content:""; left:2px; top:18px; width:8px; height:1.5px; border:0; border-radius:0; background:var(--blue); }
+.qa { border:0; border-top:1px solid var(--line); background:transparent; }
+.qa-q { background:transparent; }
+.qa-v { background:transparent; border-left:2px solid var(--line); border-radius:0; padding:2px 0 2px 12px; }
+.why-item { grid-template-columns:1fr; padding:22px 0 16px; }
+.why-item.why-sub { background:transparent; padding:18px 0 12px; }
+.why-ev { background:transparent; padding:0; border-left:2px solid var(--line); padding-left:12px; }
+.stat { border-radius:0; }
+.lead-note, .assure, .decide-box, .kenshu-cta, .dip-note, .ev-next, .b2c-entry-grid a, .scene-pair, .job-flow, .ice, .case-voice, .stat-band .stat { border-radius:2px !important; }
+.page-toc a, .ke-chips span, .way-guide span, .mini-steps span { border-radius:2px; }
+.pg .pain-item { padding:6px 0 6px 18px; font-size:.92rem; }
+.pg { gap:4px; }

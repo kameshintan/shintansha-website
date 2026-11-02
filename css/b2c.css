@@ -183,3 +183,13 @@ body.b2c .ev-next-k { font-family:var(--head); font-weight:700; color:var(--acce
 body.b2c .ev-next p:not(.ev-next-k) { font-size:.88rem; }
 body.b2c .ev-more { margin:6px 0 18px; }
 body.b2c .ev-more summary { cursor:pointer; font-weight:700; color:var(--accent-ink); padding:8px 0; }
+
+/* ===== A化（2026-11-02）: 企業向けと同じく、カードの箱をやめて罫線と余白で読ませる ===== */
+body.b2c .b2c-svc-card { border:0; border-top:2px solid var(--accent-ink); border-radius:0; padding:18px 0 10px; background:transparent; }
+body.b2c .b2c-svc-card li { background:transparent; border-radius:0; padding:8px 0; border-bottom:1px solid var(--line); }
+body.b2c .ev { border:0; border-top:1px solid var(--line); border-radius:0; padding:16px 0 12px; background:transparent; }
+body.b2c .ev-date span { border-radius:2px; }
+body.b2c .ev-voice { background:transparent; border-left:2px solid var(--accent-pale); border-radius:0; padding:2px 0 2px 12px; }
+body.b2c .b2c-entry-grid a { border-radius:2px; }
+body.b2c .ev-next { border-radius:2px; }
+body.b2c .steps li { border-radius:2px; }
